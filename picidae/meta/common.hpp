@@ -1,4 +1,5 @@
-﻿#pragma once
+﻿#ifndef PICIDAE_COMMON_HPP__
+#define PICIDAE_COMMON_HPP__
 
 #include <type_traits>
 
@@ -18,3 +19,5 @@ inline constexpr bool always_true_v = always_true<T>::value;
 
 
 } // namespace picidae
+
+#endif // PICIDAE_COMMON_HPP__

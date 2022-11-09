@@ -1,4 +1,5 @@
-#pragma once
+#ifndef PICIDAE_MACRO_HPP__
+#define PICIDAE_MACRO_HPP__
 
 #include <type_traits>
 
@@ -22,3 +23,5 @@ namespace picidae {
   enum class T
 
 } // namespace picidae
+
+#endif // PICIDAE_MACRO_HPP__

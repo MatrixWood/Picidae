@@ -1,7 +1,7 @@
 #include <iostream>
 
-#include "picidae/meta/common.h"
-#include "picidae/meta/macro.h"
+#include "picidae/meta/common.hpp"
+#include "picidae/meta/macro.hpp"
 
 using namespace picidae;
 

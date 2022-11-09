@@ -11,8 +11,6 @@ add_rules("mode.debug", "mode.release")
 
 add_includedirs("./")
 
--- add_requires("gtest")
+add_requires("gtest")
 
 add_subdirs('test')
--- target("common_marco_test")
---   add_files("./test/*.cc")
