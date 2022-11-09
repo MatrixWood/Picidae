@@ -5,3 +5,6 @@ target("common_macro_test")
 
 target("cpplisp_test")
   add_files("cpplisp_test.cc")
+
+target("meta_test")
+  add_files("meta_test.cc")

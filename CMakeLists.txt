@@ -13,9 +13,11 @@ project(
 
 set(project_version "${${PROJECT_NAME}_VERSION}")
 
+
 message(STATUS "Project '${PROJECT_NAME}', version: '${project_version}'")
 
 option(PICIDAE_OPT_BUILD_TESTS "Build all picidae tests" ON)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 message(STATUS "PICIDAE_OPT_BUILD_TESTS is ${PICIDAE_OPT_BUILD_TESTS}")
 

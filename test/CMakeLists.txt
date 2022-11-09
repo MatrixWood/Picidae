@@ -15,10 +15,11 @@ find_package(GTest REQUIRED)
 set(TEST_LIST
   cpplisp_test
   common_macro_test
+  meta_test
 )
 
 foreach(src ${TEST_LIST})
-  message("${src}")
+  message(STATUS "unittest files found: ${src}.cc")
   add_executable(${src} EXCLUDE_FROM_ALL ${src}.cc)
   target_include_directories(${src} PUBLIC ${PROJECT_SOURCE_DIR}/..)
   target_link_libraries(${src} GTest::gtest GTest::gtest_main)
