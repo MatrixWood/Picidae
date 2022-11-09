@@ -19,13 +19,13 @@ set(TEST_LIST
 
 foreach(src ${TEST_LIST})
   message("${src}")
-	add_executable(${src} EXCLUDE_FROM_ALL ${src}.cc)
+  add_executable(${src} EXCLUDE_FROM_ALL ${src}.cc)
   target_include_directories(${src} PUBLIC ${PROJECT_SOURCE_DIR}/..)
-	target_link_libraries(${src} GTest::gtest GTest::gtest_main)
-	add_test(AllTestsInPicidae ${src})
-	add_dependencies(check ${src})
+  target_link_libraries(${src} GTest::gtest GTest::gtest_main)
+  add_test(AllTestsInPicidae ${src})
+  add_dependencies(check ${src})
 endforeach()
 
 foreach(src ${TEST_LIST})
-	add_test(${src}-memory-check ${memcheck_command} ./${src})
+  add_test(${src}-memory-check ${memcheck_command} ./${src})
 endforeach()
