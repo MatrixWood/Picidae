@@ -1,7 +1,7 @@
 #include <iostream>
 
-#include "common.h"
-#include "macro.h"
+#include "picidae/meta/common.h"
+#include "picidae/meta/macro.h"
 
 using namespace picidae;
 
@@ -13,8 +13,10 @@ enum AnimalFlags {
 };
 
 inline AnimalFlags operator|(AnimalFlags a, AnimalFlags b) {
-  return static_cast<AnimalFlags>(static_cast<std::underlying_type_t<AnimalFlags>>(a)
-    | static_cast<std::underlying_type_t<AnimalFlags>>(b));
+  return static_cast<AnimalFlags>(
+    static_cast<std::underlying_type_t<AnimalFlags>>(a) |
+    static_cast<std::underlying_type_t<AnimalFlags>>(b)
+  );
 }
 
 ENUM_FLAGS(Hands) {
