@@ -9,7 +9,7 @@
 #include "picidae/meta/common.hpp"
 #include "picidae/meta/debug.hpp"
 
-TEST(Meta, meta) {
+TEST(Meta, common) {
   using namespace picidae;
 
   EXPECT_EQ(e<char>, '\x2');
@@ -24,6 +24,10 @@ TEST(Meta, meta) {
   execute<c_1::value, 1>();
   execute<_typeof<cpplisp::runtime::_list_t<int>>::type,
           cpplisp::runtime::ConsPtr<int, cpplisp::runtime::nil_t>>();
+
+#if __cplusplus >= 202002L
+  execute<is_base_template_of_v<std::tuple, std::tuple<int, char>>>();
+#endif
 }
 
 int main(int argc, char **argv) {
