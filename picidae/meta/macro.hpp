@@ -1,5 +1,5 @@
-#ifndef PICIDAE_MACRO_HPP__
-#define PICIDAE_MACRO_HPP__
+#ifndef PICIDAE_META_MACRO_HPP__
+#define PICIDAE_META_MACRO_HPP__
 
 #include <type_traits>
 
@@ -25,4 +25,4 @@ namespace picidae {
 
 }  // namespace picidae
 
-#endif  // PICIDAE_MACRO_HPP__
+#endif  // PICIDAE_META_MACRO_HPP__

@@ -1,5 +1,5 @@
-#ifndef PICIDAE_DETAIL_MT_FOLD_HPP__
-#define PICIDAE_DETAIL_MT_FOLD_HPP__
+#ifndef PICIDAE_META_DETAIL_MT_FOLD_HPP__
+#define PICIDAE_META_DETAIL_MT_FOLD_HPP__
 
 namespace picidae {
 
@@ -45,4 +45,4 @@ using mt_fold_q = typename detail::mt_fold_impl<L, V, Q::template fn>;
 
 }  // namespace picidae
 
-#endif  // PICIDAE_DETAIL_MT_FOLD_HPP__
+#endif  // PICIDAE_META_DETAIL_MT_FOLD_HPP__

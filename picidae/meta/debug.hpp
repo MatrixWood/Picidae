@@ -1,5 +1,5 @@
-#ifndef PICIDAE_DEBUG_HPP__
-#define PICIDAE_DEBUG_HPP__
+#ifndef PICIDAE_META_DEBUG_HPP__
+#define PICIDAE_META_DEBUG_HPP__
 
 #include <type_traits>
 namespace picidae {
@@ -82,4 +82,4 @@ struct NotEQ<T, T> {
 
 }  // namespace picidae
 
-#endif  // PICIDAE_DEBUG_HPP__
+#endif  // PICIDAE_META_DEBUG_HPP__

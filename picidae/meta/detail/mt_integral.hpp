@@ -1,5 +1,5 @@
-#ifndef PICIDAE_DETAIL_MT_INTEGRAL_HPP__
-#define PICIDAE_DETAIL_MT_INTEGRAL_HPP__
+#ifndef PICIDAE_META_DETAIL_MT_INTEGRAL_HPP__
+#define PICIDAE_META_DETAIL_MT_INTEGRAL_HPP__
 
 #include <type_traits>
 
@@ -29,4 +29,4 @@ using mt_size_t = std::integral_constant<std::size_t, N>;
 
 }  // namespace picidae
 
-#endif  // PICIDAE_DETAIL_MT_INTEGRAL_HPP__
+#endif  // PICIDAE_META_DETAIL_MT_INTEGRAL_HPP__

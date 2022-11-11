@@ -1,5 +1,5 @@
-#ifndef PICIDAE_DETAIL_MT_LIST_HPP__
-#define PICIDAE_DETAIL_MT_LIST_HPP__
+#ifndef PICIDAE_META_DETAIL_MT_LIST_HPP__
+#define PICIDAE_META_DETAIL_MT_LIST_HPP__
 
 namespace picidae {
 
@@ -12,4 +12,4 @@ struct mt_list {};
 
 }  // namespace picidae
 
-#endif  // PICIDAE_DETAIL_MT_LIST_HPP__
+#endif  // PICIDAE_META_DETAIL_MT_LIST_HPP__

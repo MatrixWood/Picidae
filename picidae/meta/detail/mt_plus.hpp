@@ -1,5 +1,5 @@
-#ifndef PICIDAE_DETAIL_MT_PLUS_HPP__
-#define PICIDAE_DETAIL_MT_PLUS_HPP__
+#ifndef PICIDAE_META_DETAIL_MT_PLUS_HPP__
+#define PICIDAE_META_DETAIL_MT_PLUS_HPP__
 
 #include <type_traits>
 
@@ -52,4 +52,4 @@ using mt_plus = typename detail::mt_plus_impl<T...>::type;
 
 }  // namespace picidae
 
-#endif  // PICIDAE_DETAIL_MT_PLUS_HPP__
+#endif  // PICIDAE_META_DETAIL_MT_PLUS_HPP__

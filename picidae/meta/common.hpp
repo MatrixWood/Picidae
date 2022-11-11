@@ -1,5 +1,5 @@
-﻿#ifndef PICIDAE_COMMON_HPP__
-#define PICIDAE_COMMON_HPP__
+﻿#ifndef PICIDAE_META_COMMON_HPP__
+#define PICIDAE_META_COMMON_HPP__
 
 #include <functional>
 #include <tuple>
@@ -1350,4 +1350,4 @@ struct equal {
 
 }  // namespace picidae
 
-#endif  // PICIDAE_COMMON_HPP__
+#endif  // PICIDAE_META_COMMON_HPP__
