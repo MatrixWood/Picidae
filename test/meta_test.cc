@@ -9,7 +9,9 @@
 #include "picidae/cpplisp/cpplisp.hpp"
 #include "picidae/meta/common.hpp"
 #include "picidae/meta/debug.hpp"
+#include "picidae/meta/detail/mt_fold.hpp"
 #include "picidae/meta/detail/mt_plus.hpp"
+#include "picidae/meta/detail/mt_list.hpp"
 
 TEST(Meta, common) {
   using namespace picidae;
@@ -48,6 +50,23 @@ TEST(Meta, mt_plus) {
                                std::integral_constant<char, 1>>,
                        std::integral_constant<int, 1>>::value,
           true>();
+}
+
+struct X1 {};
+struct X2 {};
+struct X3 {};
+
+template <class T1, class T2>
+struct F {};
+
+TEST(Meta, mt_fold) {
+  using namespace picidae;
+  using namespace picidae::meta;
+
+  execute<mt_fold<mt_list<>, void, F>, void>();
+  execute<mt_fold<mt_list<X1>, void, F>, F<void, X1>>();
+  execute<mt_fold<mt_list<X1, X2>, void, F>, F<F<void, X1>, X2>>();
+  execute<mt_fold<mt_list<X1, X2, X3>, void, F>, F<F<F<void, X1>, X2>, X3>>();
 }
 
 int main(int argc, char **argv) {
