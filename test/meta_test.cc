@@ -11,7 +11,6 @@
 #include "picidae/meta/debug.hpp"
 #include "picidae/meta/detail/mt_plus.hpp"
 
-
 TEST(Meta, common) {
   using namespace picidae;
   using namespace picidae::meta;
@@ -38,7 +37,17 @@ TEST(Meta, mt_plus) {
   using namespace picidae;
   using namespace picidae::meta;
 
-  execute<std::is_same<mt_plus<>, std::integral_constant<int, 0>>::value, true>();
+  execute<std::is_same<mt_plus<>, std::integral_constant<int, 0>>::value,
+          true>();
+  execute<std::is_same<mt_plus<std::integral_constant<int, 0>,
+                               std::integral_constant<int, 1>>,
+                       std::integral_constant<int, 1>>::value,
+          true>();
+
+  execute<std::is_same<mt_plus<std::integral_constant<char, 0>,
+                               std::integral_constant<char, 1>>,
+                       std::integral_constant<int, 1>>::value,
+          true>();
 }
 
 int main(int argc, char **argv) {

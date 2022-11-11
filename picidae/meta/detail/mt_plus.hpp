@@ -24,7 +24,8 @@ struct mt_plus_impl<T1, T...> {
   static const decltype(T1::value + mt_plus_impl<T...>::type::value) _v =
       T1::value + mt_plus_impl<T...>::type::value;
   using type =
-      std::integral_constant<typename std::remove_const<decltype(_v)>, _v>;
+      std::integral_constant<typename std::remove_const<decltype(_v)>::type,
+                             _v>;
 };
 
 template <class T1, class T2, class T3, class T4, class T5, class T6, class T7,
