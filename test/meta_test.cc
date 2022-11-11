@@ -2,15 +2,19 @@
 
 #include <iostream>
 #include <string>
+#include <type_traits>
 #include <typeinfo>
 #include <vector>
 
 #include "picidae/cpplisp/cpplisp.hpp"
 #include "picidae/meta/common.hpp"
 #include "picidae/meta/debug.hpp"
+#include "picidae/meta/detail/mt_plus.hpp"
+
 
 TEST(Meta, common) {
   using namespace picidae;
+  using namespace picidae::meta;
 
   EXPECT_EQ(e<char>, '\x2');
   EXPECT_EQ(e<int>, 2);
@@ -28,6 +32,13 @@ TEST(Meta, common) {
 #if __cplusplus >= 202002L
   execute<is_base_template_of_v<std::tuple, std::tuple<int, char>>>();
 #endif
+}
+
+TEST(Meta, mt_plus) {
+  using namespace picidae;
+  using namespace picidae::meta;
+
+  execute<std::is_same<mt_plus<>, std::integral_constant<int, 0>>::value, true>();
 }
 
 int main(int argc, char **argv) {

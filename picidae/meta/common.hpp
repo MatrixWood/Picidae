@@ -9,6 +9,8 @@
 
 namespace picidae {
 
+namespace meta {
+
 template <typename T>
 struct always_false : std::false_type {};
 
@@ -35,7 +37,7 @@ constexpr T e = static_cast<T>(2.7182818284590452353);
 template <typename T>
 constexpr T pi = static_cast<T>(3.1415926535897932385);
 
-template <auto N, typename T = picidae::remove_cvref_t<decltype(N)>>
+template <auto N, typename T = picidae::meta::remove_cvref_t<decltype(N)>>
 using c_ = std::integral_constant<T, N>;
 
 using c_0 = c_<0>;
@@ -1343,6 +1345,8 @@ struct equal {
   template <typename T>
   struct apply : bool_<typev<T> == N> {};
 };
+
+}  // namespace meta
 
 }  // namespace picidae
 
