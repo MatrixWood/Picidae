@@ -45,6 +45,10 @@
   #define PICIDAE_MAYBE_UNUSED __attribute((__unused__))
 #endif
 
+#ifndef PICIDAE_DESCR_CONSTEXPR
+  #define PICIDAE_DESCR_CONSTEXPR static constexpr
+#endif
+
 #include <type_traits>
 
 // from

@@ -13,8 +13,8 @@ inline AnimalFlags operator|(AnimalFlags a, AnimalFlags b) {
       static_cast<std::underlying_type_t<AnimalFlags>>(b));
 }
 
-ENUM_FLAGS(Hands){NoHands = 0, OneHand = 1 << 0, TwoHands = 1 << 1,
-                  LeftHand = 1 << 2, RightHand = 1 << 3};
+PICIDAE_ENUM_FLAGS(Hands){NoHands = 0, OneHand = 1 << 0, TwoHands = 1 << 1,
+                          LeftHand = 1 << 2, RightHand = 1 << 3};
 
 void test_enum_flag_operator() {
   {

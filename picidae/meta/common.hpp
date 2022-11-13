@@ -7,6 +7,8 @@
 #include <utility>
 #include <variant>
 
+#include "picidae/meta/macro.hpp"
+
 namespace picidae {
 
 namespace meta {
@@ -30,6 +32,26 @@ struct remove_cvref {
 
 template <class T>
 using remove_cvref_t = typename remove_cvref<T>::type;
+
+#if defined(PICIDAE_CPP14)
+using std::index_sequence;
+using std::make_index_sequence;
+#else
+template <size_t...>
+struct index_sequence {};
+template <size_t N, size_t... S>
+struct make_index_sequence_impl : make_index_sequence_impl<N - 1, N - 1, S...> {
+};
+template <size_t... S>
+struct make_index_sequence_impl<0, S...> {
+  using type = index_index_sequence<S...>;
+};
+template <size_t... N>
+using make_index_sequence = typename make_index_sequence_impl<N>::type;
+#endif
+
+// todo: need to check for c++ standard support
+/*
 
 template <typename T>
 constexpr T e = static_cast<T>(2.7182818284590452353);
@@ -990,7 +1012,8 @@ template <typename T>
 using nest_last_t = typeof_t<nest_last<T>>;
 
 template <bool B, typename T>
-using nest_last_if = std::conditional_t<B, nest_last<T>, std::__type_identity<T>>;
+using nest_last_if = std::conditional_t<B, nest_last<T>,
+std::__type_identity<T>>;
 
 template <bool B, typename T>
 using nest_last_if_t = typeof_t<nest_last_if<B, T>>;
@@ -1345,6 +1368,8 @@ struct equal {
   template <typename T>
   struct apply : bool_<typev<T> == N> {};
 };
+
+*/
 
 }  // namespace meta
 
