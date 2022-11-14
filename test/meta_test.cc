@@ -9,6 +9,7 @@
 #include "picidae/cpplisp/cpplisp.hpp"
 #include "picidae/meta/common.hpp"
 #include "picidae/meta/debug.hpp"
+#include "picidae/meta/descr.hpp"
 #include "picidae/meta/detail/mt_fold.hpp"
 #include "picidae/meta/detail/mt_plus.hpp"
 #include "picidae/meta/detail/mt_list.hpp"
@@ -67,6 +68,18 @@ TEST(Meta, mt_fold) {
   execute<mt_fold<mt_list<X1>, void, F>, F<void, X1>>();
   execute<mt_fold<mt_list<X1, X2>, void, F>, F<F<void, X1>, X2>>();
   execute<mt_fold<mt_list<X1, X2, X3>, void, F>, F<F<F<void, X1>, X2>, X3>>();
+}
+
+TEST(Meta, descr) {
+  using namespace picidae;
+
+  const char text[] = "testtext";
+  const char text1[] = "testtext1";
+  auto t = meta::const_name(text);
+
+  auto t2 = meta::_<true>(text, text1);
+  //std::cout << t2.text << std::endl;
+  meta::_<12>();
 }
 
 int main(int argc, char **argv) {
