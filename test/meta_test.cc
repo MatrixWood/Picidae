@@ -120,6 +120,11 @@ TEST(Mata, rename) {
   PICIDAE_TEST_TRAIT_TRUE((std::is_same<mt_rename<L1, std::tuple>, std::tuple<>>));
   PICIDAE_TEST_TRAIT_TRUE((std::is_same<mt_rename<L1, X>, X<>>));
   PICIDAE_TEST_TRAIT_TRUE((std::is_same<mt_rename<L1, Y>, Y<>>));
+
+  PICIDAE_TEST_TRAIT_TRUE((std::is_same<mt_apply<mt_list, L1>, mt_list<>>));
+  PICIDAE_TEST_TRAIT_TRUE((std::is_same<mt_apply<std::tuple, L1>, std::tuple<>>));
+  PICIDAE_TEST_TRAIT_TRUE((std::is_same<mt_apply<X, L1>, X<>>));
+  PICIDAE_TEST_TRAIT_TRUE((std::is_same<mt_apply<Y, L1>, Y<>>));
 }
 
 TEST(Meta, report_errors) {
