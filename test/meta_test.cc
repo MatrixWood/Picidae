@@ -82,6 +82,27 @@ TEST(Meta, descr) {
   meta::_<12>();
 }
 
+TEST(Mata, integer_sequence) {
+  using namespace picidae::meta;
+
+  EXPECT_EQ((std::is_same_v<make_integer_sequence<int, 0>, integer_sequence<int>>), true);
+  EXPECT_EQ((std::is_same_v<make_integer_sequence<int, 1>, integer_sequence<int, 0>>), true);
+  EXPECT_EQ((std::is_same_v<make_integer_sequence<int, 2>, integer_sequence<int, 0, 1>>), true);
+  EXPECT_EQ((std::is_same_v<make_integer_sequence<int, 3>, integer_sequence<int, 0, 1, 2>>), true);
+  EXPECT_EQ((std::is_same_v<make_integer_sequence<int, 4>, integer_sequence<int, 0, 1, 2, 3>>), true);
+
+  EXPECT_EQ((std::is_same_v<make_integer_sequence<char, 0>, integer_sequence<char>>), true);
+  EXPECT_EQ((std::is_same_v<make_integer_sequence<char, 1>, integer_sequence<char, 0>>), true);
+  EXPECT_EQ((std::is_same_v<make_integer_sequence<char, 2>, integer_sequence<char, 0, 1>>), true);
+  EXPECT_EQ((std::is_same_v<make_integer_sequence<char, 3>, integer_sequence<char, 0, 1, 2>>), true);
+  EXPECT_EQ((std::is_same_v<make_integer_sequence<char, 4>, integer_sequence<char, 0, 1, 2, 3>>), true);
+  
+  EXPECT_EQ((std::is_same_v<make_index_sequence<1>, index_sequence<1>>), true);
+  EXPECT_EQ((std::is_same_v<make_index_sequence<2>, index_sequence<0, 1>>), true);
+  EXPECT_EQ((std::is_same_v<make_index_sequence<3>, index_sequence<0, 1, 2>>), true);
+  EXPECT_EQ((std::is_same_v<make_index_sequence<4>, index_sequence<0, 1, 2, 3>>), true);
+}
+
 int main(int argc, char **argv) {
   testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
