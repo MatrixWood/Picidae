@@ -14,6 +14,7 @@ PICIDAE_NAMESPACE_BEGIN(PICIDAE_NAMESPACE)
 
 PICIDAE_NAMESPACE_BEGIN(lightweighttest)
 
+#define PICIDAE_LIGHTWEIGHTTEST_NAME "[PICIDAE LWT TEST INFO] "
 #define PICIDAE_LIGHTWEIGHTTEST_TERM_RED "\033[91m"
 #define PICIDAE_LIGHTWEIGHTTEST_TERM_GREEN "\033[92m"
 
@@ -24,6 +25,7 @@ class test_result {
   ~test_result() {
     if (!report_) {
       std::cerr << PICIDAE_LIGHTWEIGHTTEST_TERM_RED
+                << PICIDAE_LIGHTWEIGHTTEST_NAME
                 << "main() should return report_errors()"
                 << PICIDAE_LIGHTWEIGHTTEST_TERM_RED << std::endl;
       std::abort();
@@ -52,7 +54,8 @@ inline bool test_impl(char const* expr, char const* file, int line,
     test_results();
     return true;
   } else {
-    std::cerr << PICIDAE_LIGHTWEIGHTTEST_TERM_RED << file << "(" << line
+    std::cerr << PICIDAE_LIGHTWEIGHTTEST_TERM_RED
+              << PICIDAE_LIGHTWEIGHTTEST_NAME << file << "(" << line
               << "): test '" << expr << "' failed in function '" << function
               << "'" << PICIDAE_LIGHTWEIGHTTEST_TERM_RED << std::endl;
     ++test_results().errors();
@@ -62,37 +65,38 @@ inline bool test_impl(char const* expr, char const* file, int line,
 
 inline void error_impl(char const* msg, char const* file, int line,
                        char const* function) {
-  std::cerr << PICIDAE_LIGHTWEIGHTTEST_TERM_RED << file << "(" << line
-            << "): " << msg << " in function '" << function << "'"
-            << PICIDAE_LIGHTWEIGHTTEST_TERM_RED << std::endl;
+  std::cerr << PICIDAE_LIGHTWEIGHTTEST_TERM_RED << PICIDAE_LIGHTWEIGHTTEST_NAME
+            << file << "(" << line << "): " << msg << " in function '"
+            << function << "'" << PICIDAE_LIGHTWEIGHTTEST_TERM_RED << std::endl;
   ++test_results().errors();
 }
 
 inline void throw_failed_impl(const char* expr, char const* excep,
                               char const* file, int line,
                               char const* function) {
-  std::cerr << PICIDAE_LIGHTWEIGHTTEST_TERM_RED << file << "(" << line
-            << "): expression '" << expr << "' did not throw exception '"
-            << excep << "' in function '" << function << "'"
-            << PICIDAE_LIGHTWEIGHTTEST_TERM_RED << std::endl;
+  std::cerr << PICIDAE_LIGHTWEIGHTTEST_TERM_RED << PICIDAE_LIGHTWEIGHTTEST_NAME
+            << file << "(" << line << "): expression '" << expr
+            << "' did not throw exception '" << excep << "' in function '"
+            << function << "'" << PICIDAE_LIGHTWEIGHTTEST_TERM_RED << std::endl;
   ++test_results().errors();
 }
 
 inline void no_throw_failed_impl(const char* expr, const char* file, int line,
                                  const char* function) {
-  std::cerr << PICIDAE_LIGHTWEIGHTTEST_TERM_RED << file << "(" << line
-            << "): expression '" << expr << "' threw an exception in function '"
-            << function << "'" << PICIDAE_LIGHTWEIGHTTEST_TERM_RED << std::endl;
+  std::cerr << PICIDAE_LIGHTWEIGHTTEST_TERM_RED << PICIDAE_LIGHTWEIGHTTEST_NAME
+            << file << "(" << line << "): expression '" << expr
+            << "' threw an exception in function '" << function << "'"
+            << PICIDAE_LIGHTWEIGHTTEST_TERM_RED << std::endl;
   ++test_results().errors();
 }
 
 inline void no_throw_failed_impl(const char* expr, const char* what,
                                  const char* file, int line,
                                  const char* function) {
-  std::cerr << PICIDAE_LIGHTWEIGHTTEST_TERM_RED << file << "(" << line
-            << "): expression '" << expr << "' threw an exception in function '"
-            << function << "': " << what << PICIDAE_LIGHTWEIGHTTEST_TERM_RED
-            << std::endl;
+  std::cerr << PICIDAE_LIGHTWEIGHTTEST_TERM_RED << PICIDAE_LIGHTWEIGHTTEST_NAME
+            << file << "(" << line << "): expression '" << expr
+            << "' threw an exception in function '" << function << "': " << what
+            << PICIDAE_LIGHTWEIGHTTEST_TERM_RED << std::endl;
   ++test_results().errors();
 }
 
@@ -184,7 +188,8 @@ inline bool test_with_impl(BinaryPredicate pred, char const* expr1,
     test_results();
     return true;
   } else {
-    std::cerr << PICIDAE_LIGHTWEIGHTTEST_TERM_RED << file << "(" << line
+    std::cerr << PICIDAE_LIGHTWEIGHTTEST_TERM_RED
+              << PICIDAE_LIGHTWEIGHTTEST_NAME << file << "(" << line
               << "): test '" << expr1 << " " << lwt_predicate_name(pred) << " "
               << expr2 << "' ('" << test_output_impl(t) << "' "
               << lwt_predicate_name(pred) << " '" << test_output_impl(u)
@@ -202,7 +207,8 @@ inline bool test_cstr_eq_impl(char const* expr1, char const* expr2,
     test_results();
     return true;
   } else {
-    std::cerr << PICIDAE_LIGHTWEIGHTTEST_TERM_RED << file << "(" << line
+    std::cerr << PICIDAE_LIGHTWEIGHTTEST_TERM_RED
+              << PICIDAE_LIGHTWEIGHTTEST_NAME << file << "(" << line
               << "): test '" << expr1 << " == " << expr2 << "' ('" << t
               << "' == '" << u << "') failed in function '" << function << "'"
               << PICIDAE_LIGHTWEIGHTTEST_TERM_RED << std::endl;
@@ -218,7 +224,8 @@ inline bool test_cstr_ne_impl(char const* expr1, char const* expr2,
     test_results();
     return true;
   } else {
-    std::cerr << PICIDAE_LIGHTWEIGHTTEST_TERM_RED << file << "(" << line
+    std::cerr << PICIDAE_LIGHTWEIGHTTEST_TERM_RED
+              << PICIDAE_LIGHTWEIGHTTEST_NAME << file << "(" << line
               << "): test '" << expr1 << " != " << expr2 << "' ('" << t
               << "' != '" << u << "') failed in function '" << function << "'"
               << PICIDAE_LIGHTWEIGHTTEST_TERM_RED << std::endl;
@@ -253,17 +260,18 @@ bool test_all_eq_impl(FormattedOutputFunction& output, char const* file,
       break;  // do-while
     }
     if (error_count == 0) {
-      output << PICIDAE_LIGHTWEIGHTTEST_TERM_RED << file << "(" << line
+      output << PICIDAE_LIGHTWEIGHTTEST_TERM_RED << PICIDAE_LIGHTWEIGHTTEST_NAME
+             << file << "(" << line
              << "): Container contents differ in function '" << function
              << "':" << PICIDAE_LIGHTWEIGHTTEST_TERM_RED;
     } else if (error_count >= max_count) {
-      output << PICIDAE_LIGHTWEIGHTTEST_TERM_RED << " ..."
-             << PICIDAE_LIGHTWEIGHTTEST_TERM_RED;
+      output << PICIDAE_LIGHTWEIGHTTEST_TERM_RED << PICIDAE_LIGHTWEIGHTTEST_NAME
+             << " ..." << PICIDAE_LIGHTWEIGHTTEST_TERM_RED;
       break;
     }
-    output << PICIDAE_LIGHTWEIGHTTEST_TERM_RED << " [" << first_index << "] '"
-           << test_output_impl(*first_it) << "' != '"
-           << test_output_impl(*second_it) << "'"
+    output << PICIDAE_LIGHTWEIGHTTEST_TERM_RED << PICIDAE_LIGHTWEIGHTTEST_NAME
+           << " [" << first_index << "] '" << test_output_impl(*first_it)
+           << "' != '" << test_output_impl(*second_it) << "'"
            << PICIDAE_LIGHTWEIGHTTEST_TERM_RED;
     ++first_it;
     ++second_it;
@@ -276,14 +284,14 @@ bool test_all_eq_impl(FormattedOutputFunction& output, char const* file,
   second_index += std::distance(second_it, second_end);
   if (first_index != second_index) {
     if (error_count == 0) {
-      output << PICIDAE_LIGHTWEIGHTTEST_TERM_RED << file << "(" << line
-             << "): Container sizes differ in function '" << function
-             << "': size(" << first_index << ") != size(" << second_index << ")"
-             << PICIDAE_LIGHTWEIGHTTEST_TERM_RED;
+      output << PICIDAE_LIGHTWEIGHTTEST_TERM_RED << PICIDAE_LIGHTWEIGHTTEST_NAME
+             << file << "(" << line << "): Container sizes differ in function '"
+             << function << "': size(" << first_index << ") != size("
+             << second_index << ")" << PICIDAE_LIGHTWEIGHTTEST_TERM_RED;
     } else {
-      output << PICIDAE_LIGHTWEIGHTTEST_TERM_RED << " [*] size(" << first_index
-             << ") != size(" << second_index << ")"
-             << PICIDAE_LIGHTWEIGHTTEST_TERM_RED;
+      output << PICIDAE_LIGHTWEIGHTTEST_TERM_RED << PICIDAE_LIGHTWEIGHTTEST_NAME
+             << " [*] size(" << first_index << ") != size(" << second_index
+             << ")" << PICIDAE_LIGHTWEIGHTTEST_TERM_RED;
     }
     ++error_count;
   }
@@ -325,16 +333,17 @@ bool test_all_with_impl(FormattedOutputFunction& output, char const* file,
       break;  // do-while
     }
     if (error_count == 0) {
-      output << PICIDAE_LIGHTWEIGHTTEST_TERM_RED << file << "(" << line
+      output << PICIDAE_LIGHTWEIGHTTEST_TERM_RED << PICIDAE_LIGHTWEIGHTTEST_NAME
+             << file << "(" << line
              << "): Container contents differ in function '" << function
              << "':" << PICIDAE_LIGHTWEIGHTTEST_TERM_RED;
     } else if (error_count >= max_count) {
-      output << PICIDAE_LIGHTWEIGHTTEST_TERM_RED << " ..."
-             << PICIDAE_LIGHTWEIGHTTEST_TERM_RED;
+      output << PICIDAE_LIGHTWEIGHTTEST_TERM_RED << PICIDAE_LIGHTWEIGHTTEST_NAME
+             << " ..." << PICIDAE_LIGHTWEIGHTTEST_TERM_RED;
       break;
     }
-    output << PICIDAE_LIGHTWEIGHTTEST_TERM_RED << " [" << first_index << "]"
-           << PICIDAE_LIGHTWEIGHTTEST_TERM_RED;
+    output << PICIDAE_LIGHTWEIGHTTEST_TERM_RED << PICIDAE_LIGHTWEIGHTTEST_NAME
+           << " [" << first_index << "]" << PICIDAE_LIGHTWEIGHTTEST_TERM_RED;
     ++first_it;
     ++second_it;
     ++first_index;
@@ -346,14 +355,14 @@ bool test_all_with_impl(FormattedOutputFunction& output, char const* file,
   second_index += std::distance(second_it, second_end);
   if (first_index != second_index) {
     if (error_count == 0) {
-      output << PICIDAE_LIGHTWEIGHTTEST_TERM_RED << file << "(" << line
-             << "): Container sizes differ in function '" << function
-             << "': size(" << first_index << ") != size(" << second_index << ")"
-             << PICIDAE_LIGHTWEIGHTTEST_TERM_RED;
+      output << PICIDAE_LIGHTWEIGHTTEST_TERM_RED << PICIDAE_LIGHTWEIGHTTEST_NAME
+             << file << "(" << line << "): Container sizes differ in function '"
+             << function << "': size(" << first_index << ") != size("
+             << second_index << ")" << PICIDAE_LIGHTWEIGHTTEST_TERM_RED;
     } else {
-      output << PICIDAE_LIGHTWEIGHTTEST_TERM_RED << " [*] size(" << first_index
-             << ") != size(" << second_index << ")"
-             << PICIDAE_LIGHTWEIGHTTEST_TERM_RED;
+      output << PICIDAE_LIGHTWEIGHTTEST_TERM_RED << PICIDAE_LIGHTWEIGHTTEST_NAME
+             << " [*] size(" << first_index << ") != size(" << second_index
+             << ")" << PICIDAE_LIGHTWEIGHTTEST_TERM_RED;
     }
     ++error_count;
   }
@@ -375,10 +384,12 @@ inline int report_errors() {
   int errors = result.errors();
 
   if (errors == 0) {
-    std::cerr << PICIDAE_LIGHTWEIGHTTEST_TERM_GREEN << "No errors detected."
+    std::cerr << PICIDAE_LIGHTWEIGHTTEST_TERM_GREEN
+              << PICIDAE_LIGHTWEIGHTTEST_NAME << "No errors detected."
               << PICIDAE_LIGHTWEIGHTTEST_TERM_GREEN << std::endl;
   } else {
-    std::cerr << PICIDAE_LIGHTWEIGHTTEST_TERM_RED << errors << " error"
+    std::cerr << PICIDAE_LIGHTWEIGHTTEST_TERM_RED
+              << PICIDAE_LIGHTWEIGHTTEST_NAME << errors << " error"
               << (errors == 1 ? "" : "s") << " detected."
               << PICIDAE_LIGHTWEIGHTTEST_TERM_RED << std::endl;
   }
