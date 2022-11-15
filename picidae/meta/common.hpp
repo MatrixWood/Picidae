@@ -13,17 +13,23 @@ namespace picidae {
 
 namespace meta {
 
-template <typename T>
+template <typename...>
 struct always_false : std::false_type {};
 
-template <typename T>
-inline constexpr bool always_false_v = always_false<T>::value;
+template <typename... Ts>
+inline constexpr bool always_false_v = always_false<Ts...>::value;
 
-template <typename T>
+template <typename ...>
 struct always_true : std::true_type {};
 
-template <typename T>
-inline constexpr bool always_true_v = always_true<T>::value;
+template <typename... Ts>
+inline constexpr bool always_true_v = always_true<Ts...>::value;
+
+template <bool B>
+struct when;
+
+template <typename... Dummy>
+using when_valid = when<always_true_v<Dummy...>>;
 
 template <class T>
 struct remove_cvref {
