@@ -80,8 +80,8 @@ using make_integer_sequence =
     typename detail::make_integer_sequence_impl<T, N>::type;
 
 // index_sequence_for
-template<class... T> using index_sequence_for = make_integer_sequence<std::size_t, sizeof...(T)>;
-
+template <class... T>
+using index_sequence_for = make_integer_sequence<std::size_t, sizeof...(T)>;
 
 // make_integer_sequence
 #if defined(PICIDAE_CPP14)

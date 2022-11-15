@@ -551,7 +551,7 @@ inline void test_trait_impl(char const* trait, void (*)(T), bool expected,
   if (T::value == expected) {
     test_results();
   } else {
-    std::cerr << PICIDAE_LIGHTWEIGHTTEST_TERM_GREEN
+    std::cerr << PICIDAE_LIGHTWEIGHTTEST_TERM_RED
               << PICIDAE_LIGHTWEIGHTTEST_NAME << file << "(" << line
               << "): predicate '" << trait << "' [" << std::string(typeid(T).name())
               << "]"
@@ -575,7 +575,7 @@ inline void test_trait_same_impl(char const* types, std::is_same<T1, T2> same,
   if (test_trait_same_impl_(same)) {
     test_results();
   } else {
-    std::cerr << PICIDAE_LIGHTWEIGHTTEST_TERM_GREEN
+    std::cerr << PICIDAE_LIGHTWEIGHTTEST_TERM_RED
               << PICIDAE_LIGHTWEIGHTTEST_NAME << file << "(" << line
               << "): test 'is_same<" << types << ">'"
               << " failed in function '" << function << "' ('"
