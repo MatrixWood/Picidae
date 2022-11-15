@@ -7,6 +7,7 @@
 #include <exception>
 #include <iostream>
 #include <iterator>
+#include <string>
 
 #include "picidae/meta/macro.hpp"
 
@@ -505,7 +506,7 @@ struct test_print {};
 
 template <class T>
 inline std::ostream& operator<<(std::ostream& o, test_print<T, 2>) {
-  return o << std::string(typeid(T));
+  return o << std::string(typeid(T).name());
 }
 
 template <class T>
@@ -552,7 +553,7 @@ inline void test_trait_impl(char const* trait, void (*)(T), bool expected,
   } else {
     std::cerr << PICIDAE_LIGHTWEIGHTTEST_TERM_GREEN
               << PICIDAE_LIGHTWEIGHTTEST_NAME << file << "(" << line
-              << "): predicate '" << trait << "' [" << std::string(typeid(T))
+              << "): predicate '" << trait << "' [" << std::string(typeid(T).name())
               << "]"
               << " test failed in function '" << function
               << "' (should have been " << (expected ? "true" : "false") << ")"
@@ -585,17 +586,19 @@ inline void test_trait_same_impl(char const* types, std::is_same<T1, T2> same,
   }
 }
 
-#define BOOST_TEST_TRAIT_TRUE(type)                                         \
-  (::boost::detail::test_trait_impl(#type, (void(*) type)0, true, __FILE__, \
-                                    __LINE__, BOOST_CURRENT_FUNCTION))
-#define BOOST_TEST_TRAIT_FALSE(type)                                         \
-  (::boost::detail::test_trait_impl(#type, (void(*) type)0, false, __FILE__, \
-                                    __LINE__, BOOST_CURRENT_FUNCTION))
+#define PICIDAE_TEST_TRAIT_TRUE(type)                                        \
+  (::picidae::lightweighttest::test_trait_impl(#type, (void(*) type)0, true, \
+                                               __FILE__, __LINE__,           \
+                                               PICIDAE_CURRENT_FUNCTION))
+#define PICIDAE_TEST_TRAIT_FALSE(type)                                        \
+  (::picidae::lightweighttest::test_trait_impl(#type, (void(*) type)0, false, \
+                                               __FILE__, __LINE__,            \
+                                               PICIDAE_CURRENT_FUNCTION))
 
-#define BOOST_TEST_TRAIT_SAME(...)                                             \
-  (::boost::detail::test_trait_same_impl(                                      \
-      #__VA_ARGS__, ::boost::core::is_same<__VA_ARGS__>(), __FILE__, __LINE__, \
-      BOOST_CURRENT_FUNCTION))
+#define PICIDAE_TEST_TRAIT_SAME(...)                                 \
+  (::picidae::lightweighttest::test_trait_same_impl(                 \
+      #__VA_ARGS__, std::is_same<__VA_ARGS__>(), __FILE__, __LINE__, \
+      PICIDAE_CURRENT_FUNCTION))
 
 PICIDAE_NAMESPACE_END(lightweighttest)
 
