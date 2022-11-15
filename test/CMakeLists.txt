@@ -16,6 +16,7 @@ set(TEST_LIST
   cpplisp_test
   common_macro_test
   meta_test
+  lightweighttest_test
 )
 
 foreach(src ${TEST_LIST})

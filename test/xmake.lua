@@ -8,3 +8,6 @@ target("cpplisp_test")
 
 target("meta_test")
   add_files("meta_test.cc")
+
+target("lightweighttest_test")
+  add_files("lightweighttest_test.cc")
