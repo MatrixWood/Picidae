@@ -7,6 +7,7 @@
 #include <utility>
 #include <variant>
 
+#include "picidae/meta/detail/mt_integer_sequence.hpp"
 #include "picidae/meta/macro.hpp"
 
 namespace picidae {
@@ -19,7 +20,7 @@ struct always_false : std::false_type {};
 template <typename... Ts>
 inline constexpr bool always_false_v = always_false<Ts...>::value;
 
-template <typename ...>
+template <typename...>
 struct always_true : std::true_type {};
 
 template <typename... Ts>
@@ -39,22 +40,23 @@ struct remove_cvref {
 template <class T>
 using remove_cvref_t = typename remove_cvref<T>::type;
 
-#if defined(PICIDAE_CPP14)
-using std::index_sequence;
-using std::make_index_sequence;
-#else
-template <size_t...>
-struct index_sequence {};
-template <size_t N, size_t... S>
-struct make_index_sequence_impl : make_index_sequence_impl<N - 1, N - 1, S...> {
-};
-template <size_t... S>
-struct make_index_sequence_impl<0, S...> {
-  using type = index_index_sequence<S...>;
-};
-template <size_t... N>
-using make_index_sequence = typename make_index_sequence_impl<N>::type;
-#endif
+//#if defined(PICIDAE_CPP14)
+// using std::index_sequence;
+// using std::make_index_sequence;
+//#else
+// template <size_t...>
+// struct index_sequence {};
+// template <size_t N, size_t... S>
+// struct make_index_sequence_impl : make_index_sequence_impl<N - 1, N - 1,
+// S...> {
+//};
+// template <size_t... S>
+// struct make_index_sequence_impl<0, S...> {
+//  using type = index_index_sequence<S...>;
+//};
+// template <size_t... N>
+// using make_index_sequence = typename make_index_sequence_impl<N>::type;
+//#endif
 
 // todo: need to check for c++ standard support
 /*
