@@ -13,6 +13,8 @@
 #include "picidae/meta/detail/mt_fold.hpp"
 #include "picidae/meta/detail/mt_plus.hpp"
 #include "picidae/meta/detail/mt_list.hpp"
+#include "picidae/meta/detail/mt_rename.hpp"
+#include "picidae/lightweighttest/lightweighttest.hpp"
 
 TEST(Meta, common) {
   using namespace picidae;
@@ -97,10 +99,31 @@ TEST(Mata, integer_sequence) {
   EXPECT_EQ((std::is_same_v<make_integer_sequence<char, 3>, integer_sequence<char, 0, 1, 2>>), true);
   EXPECT_EQ((std::is_same_v<make_integer_sequence<char, 4>, integer_sequence<char, 0, 1, 2, 3>>), true);
   
-  EXPECT_EQ((std::is_same_v<make_index_sequence<1>, index_sequence<1>>), true);
+  EXPECT_EQ((std::is_same_v<make_index_sequence<1>, index_sequence<0>>), true);
   EXPECT_EQ((std::is_same_v<make_index_sequence<2>, index_sequence<0, 1>>), true);
   EXPECT_EQ((std::is_same_v<make_index_sequence<3>, index_sequence<0, 1, 2>>), true);
   EXPECT_EQ((std::is_same_v<make_index_sequence<4>, index_sequence<0, 1, 2, 3>>), true);
+}
+
+template<class... T> struct X {};
+template<class... T> using Y = X<T...>;
+
+TEST(Mata, rename) {
+  using picidae::meta::mt_apply;
+  using picidae::meta::mt_list;
+  using picidae::meta::mt_rename;
+  //using namespace picidae::lightweighttest;
+
+  using L1 = mt_list<>;
+
+  PICIDAE_TEST_TRAIT_TRUE((std::is_same<mt_rename<L1, mt_list>, mt_list<>>));
+  PICIDAE_TEST_TRAIT_TRUE((std::is_same<mt_rename<L1, std::tuple>, std::tuple<>>));
+  PICIDAE_TEST_TRAIT_TRUE((std::is_same<mt_rename<L1, X>, X<>>));
+  PICIDAE_TEST_TRAIT_TRUE((std::is_same<mt_rename<L1, Y>, Y<>>));
+}
+
+TEST(Meta, report_errors) {
+  picidae::lightweighttest::report_errors();
 }
 
 int main(int argc, char **argv) {
