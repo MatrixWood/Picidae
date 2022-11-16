@@ -32,8 +32,8 @@ struct tag_of<T, when<Condition>> {
 };
 
 template <typename T>
-struct tag_of<T, when<core_detail::is_valid<typename T::hana_tag>::value>> {
-  using type = typename T::hana_tag;
+struct tag_of<T, when<core_detail::is_valid<typename T::picidae_tag>::value>> {
+  using type = typename T::picidae_tag;
 };
 
 template <typename T>
