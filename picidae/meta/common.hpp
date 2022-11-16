@@ -26,12 +26,6 @@ struct always_true : std::true_type {};
 template <typename... Ts>
 inline constexpr bool always_true_v = always_true<Ts...>::value;
 
-template <bool B>
-struct when;
-
-template <typename... Dummy>
-using when_valid = when<always_true_v<Dummy...>>;
-
 template <class T>
 struct remove_cvref {
   using type = std::remove_cv_t<std::remove_reference_t<T>>;
