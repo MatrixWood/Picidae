@@ -4,6 +4,8 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(CMAKE_CXX_COMPILER clang++)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+set(CMAKE_BUILD_TYPE "Debug")
 
 project(
   picidae
@@ -17,8 +19,6 @@ set(project_version "${${PROJECT_NAME}_VERSION}")
 message(STATUS "Project '${PROJECT_NAME}', version: '${project_version}'")
 
 option(PICIDAE_OPT_BUILD_TESTS "Build all picidae tests" ON)
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-set(CMAKE_BUILD_TYPE "Debug")
 
 message(STATUS "PICIDAE_OPT_BUILD_TESTS is ${PICIDAE_OPT_BUILD_TESTS}")
 
