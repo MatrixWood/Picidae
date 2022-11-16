@@ -32,6 +32,7 @@ endforeach()
 
 set(META_TEST_LIST
   when_unittest
+  tag_of_unittest
 )
 
 foreach(src ${META_TEST_LIST})

@@ -11,9 +11,6 @@ PICIDAE_NAMESPACE_BEGIN(meta)
 template <typename T, typename = void>
 struct tag_of;
 
-template <typename T>
-using tag_of_t = typename tag_of<T>::type;
-
 template <typename T, typename>
 struct tag_of : tag_of<T, when<true>> {};
 
@@ -46,6 +43,9 @@ template <typename T>
 struct tag_of<T&> : tag_of<T> {};
 template <typename T>
 struct tag_of<T&&> : tag_of<T> {};
+
+template <typename T>
+using tag_of_t = typename tag_of<T>::type;
 
 PICIDAE_NAMESPACE_END(meta)
 
