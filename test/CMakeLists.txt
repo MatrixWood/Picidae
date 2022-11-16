@@ -48,3 +48,20 @@ endforeach()
 foreach(src ${META_TEST_LIST})
   add_test(${src}-memory-check ${memcheck_command} ./${src})
 endforeach()
+
+set(JSON_TEST_LIST
+  json_unittest
+)
+
+foreach(src ${JSON_TEST_LIST})
+  message(STATUS "unittest files found: ${src}.cc")
+  add_executable(${src} EXCLUDE_FROM_ALL json_unittest/${src}.cc)
+  target_include_directories(${src} PUBLIC ${PROJECT_SOURCE_DIR}/..)
+  target_link_libraries(${src} GTest::gtest GTest::gtest_main)
+  add_test(${src} ${src})
+  add_dependencies(check ${src})
+endforeach()
+
+foreach(src ${JSON_TEST_LIST})
+  add_test(${src}-memory-check ${memcheck_command} ./${src})
+endforeach()
