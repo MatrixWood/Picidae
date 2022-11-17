@@ -273,6 +273,35 @@ class Json {
   }
 };
 
+struct JsonParser {
+  static bool isspace(const char c) noexcept { return ::isspace(c) != 0; }
+
+  static void consume_ws(const std::string &str, size_t offset) {
+    while (isspace(str.at(offset)) && offset <= str.size()) {
+      ++offset;
+    }
+  }
+
+  static Json parse_object(const std::string &str, size_t &offset) {}
+
+  static Json parse_array(const std::string &str, size_t &offset) {}
+
+  static Json parse_string(const std::string &str, size_t &offset) {}
+
+  static Json parse_number(const std::string &str, size_t &offset) {}
+
+  static Json parse_bool(const std::string &str, size_t &offset) {}
+
+  static Json parse_null(const std::string &str, size_t &offset) {}
+
+  static Json parse_next(const std::string &str, size_t &offset) {}
+};
+
+inline Json Json::Load(const std::string &str) {
+  size_t offset = 0;
+  return JsonParser::parse_next(str, offset);
+}
+
 PICIDAE_NAMESPACE_END(json)
 
 PICIDAE_NAMESPACE_END(PICIDAE_NAMESPACE)
