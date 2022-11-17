@@ -292,9 +292,40 @@ struct JsonParser {
 
   static Json parse_bool(const std::string &str, size_t &offset) {}
 
-  static Json parse_null(const std::string &str, size_t &offset) {}
+  static Json parse_null(const std::string &str, size_t &offset) {
+    if (str.substr(offset, 4) != "null") {
+      throw std::runtime_error(
+          std::string("[Json Error] Null: Expected 'null', found '") +
+          str.substr(offset, 4) + "'");
+    }
+    offset += 4;
+    return Json();
+  }
 
-  static Json parse_next(const std::string &str, size_t &offset) {}
+  static Json parse_next(const std::string &str, size_t &offset) {
+    consume_ws(str, offset);
+    char value = str.at(offset);
+    switch (value) {
+      case '[':
+        return parse_array(str, offset);
+      case '{':
+        return parse_object(str, offset);
+      case '\"':
+        return parse_string(str, offset);
+      case 't':
+      case 'f':
+        return parse_bool(str, offset);
+      case 'n':
+        return parse_null(str, offset);
+      default:
+        if ((value <= '9' && value >= '0') || value == '-') {
+          return parse_number(str, offset);
+        }
+        throw std::runtime_error(
+            std::string("[Json Error] Parse: Unexpected starting character '") +
+            value + "'");
+    }
+  }
 };
 
 inline Json Json::Load(const std::string &str) {
