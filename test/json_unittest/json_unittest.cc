@@ -8,13 +8,14 @@
 
 #include "picidae/json/json.hpp"
 
-TEST(Json, base) {
+TEST(Json, string) {
   using namespace picidae::json;
 
-  auto data = Json::Load("\"12\"");
-  auto str = data.dump();
-
-  EXPECT_EQ(Json::Load(str).dump(), "\"12\"");
+  //EXPECT_EQ(Json::Load("\"12\"").dump(), "\"12\"");
+  EXPECT_EQ(Json::Load("").dump(), "\"\"");
+  //EXPECT_EQ(Json::Load("\"Hello\"").dump(), "\"Hello\"");
+  //EXPECT_EQ(Json::Load("\"Hello\nWorld\"").dump(), "\"Hello\\nWorld\"");
+  //EXPECT_EQ(Json::Load("\" \\ / \b \f \n \r \t").dump(), "\"\\\" \\\\ \\/ \\b \\f \\n \\r \\t\"");
 }
 
 TEST(Json, number_double) {

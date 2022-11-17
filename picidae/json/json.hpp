@@ -563,6 +563,10 @@ struct JsonParser {
   }
 
   static Json parse_next(const std::string &str, size_t &offset) {
+    if (str.size() == 0) {
+      throw std::runtime_error(
+          std::string("[Json Error] Parse: param str is empty'") + str + "'\n");
+    }
     consume_ws(str, offset);
     char value = str.at(offset);
     switch (value) {
