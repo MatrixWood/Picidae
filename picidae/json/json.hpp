@@ -498,7 +498,7 @@ struct JsonParser {
         is_exp_negative = true;
       } else if (c == '+') {
       } else {
-        ++offset;
+        --offset;
       }
 
       for (; offset < str.size();) {
@@ -514,7 +514,7 @@ struct JsonParser {
           break;
         }
       }
-      exp = picidae::json::detail::parse_num<std::int64_t>(exp_str) *
+      exp = picidae::json::detail::parse_num<std::int64_t>( exp_str) *
             (is_exp_negative ? -1 : 1);
     } else if (offset < str.size() &&
                (!isspace(c) && c != ',' && c != ']' && c != '}')) {
@@ -533,7 +533,7 @@ struct JsonParser {
         return Json(
             (is_negative ? -1 : 1) *
                 static_cast<double>(
-                    picidae::json::detail::parse_num<std::int64_t>(val)) +
+                    picidae::json::detail::parse_num<std::int64_t>(val)) *
             std::pow(10, exp));
       } else {
         return Json((is_negative ? -1 : 1) *
