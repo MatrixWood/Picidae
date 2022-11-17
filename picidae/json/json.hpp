@@ -171,11 +171,105 @@ class Json {
     }
   }
 
+  template <typename T>
+  explicit Json(T b, typename std::enable_if_t<std::is_same_v<T, bool>> * =
+                         nullptr) noexcept
+      : _internal(static_cast<bool>(b)) {}
+
+  template <typename T>
+  explicit Json(T i, typename std::enable_if_t<std::is_integral_v<T> &&
+                                               !std::is_same_v<T, bool>> * =
+                         nullptr) noexcept
+      : _internal(static_cast<std::int64_t>(i)) {}
+
+  template <typename T>
+  explicit Json(T f, typename std::enable_if_t<std::is_floating_point_v<T>> * =
+                         nullptr) noexcept
+      : _internal(static_cast<double>(f)) {}
+
+  template <typename T>
+  explicit Json(T s,
+                typename std::enable_if_t<std::is_convertible_v<T, std::string>>
+                    * = nullptr)
+      : _internal(static_cast<std::string>(s)) {}
+
+  static Json Load(const std::string &);
+
   Json &operator[](const std::string &key) { return _internal.Map()[key]; }
+
+  Json &operator[](const size_t index) {
+    auto &vec = _internal.Vector();
+    if (index >= vec.size()) {
+      vec.resize(index + 1);
+    }
+    return vec[index];
+  }
+
+  Json &at(const std::string &key) { return operator[](key); }
+
+  const Json &at(const std::string &key) const {
+    return _internal.visitor<Class::Object>(
+        [&](const auto &m) -> const Json & { return m.at(key); },
+        []() -> const Json & {
+          throw std::range_error("Not an object, no keys");
+        });
+  }
+
+  Json &at(size_t index) { return operator[](index); }
+
+  const Json &at(size_t index) const {
+    return _internal.visitor<Class::Array>(
+        [&](const auto &m) -> const Json & { return m.at(index); },
+        []() -> const Json & {
+          throw std::range_error("Not an array, no indexes");
+        });
+  }
+
+  auto length() const noexcept {
+    return _internal.visitor<Class::Array>(
+        [&](const auto &m) { return static_cast<int>(m.size()); },
+        []() { return -1; });
+  }
+
+  bool has_key(const std::string &key) const noexcept {
+    return _internal.visitor<Class::Object>(
+        [&](const auto &m) { return m.count(key) != 0; },
+        []() { return false; });
+  }
+
+  int size() const noexcept {
+    if (auto m = _internal.Map(); m != nullptr) {
+      return static_cast<int>(m->size());
+    }
+    if (auto v = _internal.Vector(); v != nullptr) {
+      return static_cast<int>(v->size());
+    } else {
+      return -1;
+    }
+  }
+
+  Class JsonType() const noexcept { return _internal.type(); }
+
+  bool is_null() const noexcept { return _internal.type() == Class::Null; }
 
   std::string to_string() const noexcept {
     return _internal.visitor<Class::String>([](const auto &o) { return o; },
                                             []() { return std::string{}; });
+  }
+
+  double to_float() const noexcept {
+    return _internal.visitor<Class::Floating>([](const auto &o) { return o; },
+                                              []() { return double{}; });
+  }
+
+  std::int64_t to_int() const noexcept {
+    return _internal.visitor<Class::Integral>([](const auto &o) { return o; },
+                                              []() { return std::int64_t{}; });
+  }
+
+  bool to_bool() const noexcept {
+    return _internal.visitor<Class::Boolean>([](const auto &o) { return o; },
+                                             []() { return false; });
   }
 };
 
