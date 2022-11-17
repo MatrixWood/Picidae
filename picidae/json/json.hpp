@@ -451,7 +451,43 @@ struct JsonParser {
           case '\"':
             val += '\"';
             break;
-          // TODO
+          case '\\':
+            val += '\\';
+            break;
+          case '/':
+            val += '/';
+            break;
+          case 'b':
+            val += '\b';
+            break;
+          case 'f':
+            val += '\f';
+            break;
+          case 'n':
+            val += '\n';
+            break;
+          case 'r':
+            val += '\r';
+            break;
+          case 't':
+            val += '\t';
+            break;
+          case 'u': {
+            val += "\\u";
+            for (size_t i = 1; i <= 4; ++i) {
+              c = str.at(offset + i);
+              if ((c >= '0' && c <= '9') || (c >= 'a' && c <= 'f') ||
+                  (c >= 'A' && c <= 'F')) {
+                val += c;
+              } else {
+                throw std::runtime_error(
+                    std::string("[Json Error] String:Expected hex character in "
+                                "unicode escape, found '") +
+                    c + "'\n");
+              }
+            }
+            offset += 4;
+          } break;
           default:
             val += '\\';
             break;
