@@ -173,25 +173,21 @@ class Json {
   }
 
   template <typename T>
-  explicit Json(T b, typename std::enable_if_t<std::is_same_v<T, bool>> * =
-                         nullptr) noexcept
+  explicit Json(T b, typename std::enable_if_t<std::is_same_v<T, bool>>* = nullptr) noexcept
       : _internal(static_cast<bool>(b)) {}
 
   template <typename T>
   explicit Json(T i, typename std::enable_if_t<std::is_integral_v<T> &&
-                                               !std::is_same_v<T, bool>> * =
-                         nullptr) noexcept
+                                               !std::is_same_v<T, bool>>* = nullptr) noexcept
       : _internal(static_cast<std::int64_t>(i)) {}
 
   template <typename T>
-  explicit Json(T f, typename std::enable_if_t<std::is_floating_point_v<T>> * =
-                         nullptr) noexcept
+  explicit Json(T f, typename std::enable_if_t<std::is_floating_point_v<T>>* = nullptr) noexcept
       : _internal(static_cast<double>(f)) {}
 
   template <typename T>
   explicit Json(T s,
-                typename std::enable_if_t<std::is_convertible_v<T, std::string>>
-                    * = nullptr)
+                typename std::enable_if_t<std::is_convertible_v<T, std::string>>* = nullptr)
       : _internal(static_cast<std::string>(s)) {}
 
   static Json Load(const std::string &);
@@ -514,7 +510,7 @@ struct JsonParser {
           break;
         }
       }
-      exp = picidae::json::detail::parse_num<std::int64_t>( exp_str) *
+      exp = picidae::json::detail::parse_num<std::int64_t>(exp_str) *
             (is_exp_negative ? -1 : 1);
     } else if (offset < str.size() &&
                (!isspace(c) && c != ',' && c != ']' && c != '}')) {
@@ -530,11 +526,10 @@ struct JsonParser {
                   std::pow(10, exp));
     } else {
       if (!exp_str.empty()) {
-        return Json(
-            (is_negative ? -1 : 1) *
-                static_cast<double>(
-                    picidae::json::detail::parse_num<std::int64_t>(val)) *
-            std::pow(10, exp));
+        return Json((is_negative ? -1 : 1) *
+                    static_cast<double>(
+                        picidae::json::detail::parse_num<std::int64_t>(val)) *
+                    std::pow(10, exp));
       } else {
         return Json((is_negative ? -1 : 1) *
                     picidae::json::detail::parse_num<std::int64_t>(val));
