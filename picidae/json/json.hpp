@@ -379,9 +379,73 @@ struct JsonParser {
     }
   }
 
-  static Json parse_object(const std::string &str, size_t &offset) {}
+  static Json parse_object(const std::string &str, size_t &offset) {
+    Json Object(Json::Class::Object);
 
-  static Json parse_array(const std::string &str, size_t &offset) {}
+    ++offset;
+    consume_ws(str, offset);
+    if (str.at(offset) == '}') {
+      ++offset;
+      return Object;
+    }
+
+    for (; offset < str.size();) {
+      Json key = parse_next(str, offset);
+      consume_ws(str, offset);
+      if (str.at(offset) != ':') {
+        throw std::runtime_error(
+            std::string("[Json Error] Object: Expected ':' , found '") +
+            str.at(offset) + "'\n");
+      }
+      consume_ws(str, ++offset);
+      Json value = parse_next(str, offset);
+      Object[key.to_string()] = value;
+
+      consume_ws(str, offset);
+      if (str.at(offset) == ',') {
+        ++offset;
+        continue;
+      } else if (str.at(offset) == '}') {
+        ++offset;
+        break;
+      } else {
+        throw std::runtime_error(
+            std::string("[Json Error] Object: Expected ',' or '}' , found '") +
+            str.at(offset) + "'\n");
+      }
+    }
+    return Object;
+  }
+
+  static Json parse_array(const std::string &str, size_t &offset) {
+    Json Array(Json::Class::Array);
+    size_t index = 0;
+
+    ++offset;
+    consume_ws(str, offset);
+    if (str.at(offset) == ']') {
+      ++offset;
+      return Array;
+    }
+
+    for (; offset < str.size();) {
+      Array[index++] = parse_next(str, offset);
+      consume_ws(str, offset);
+
+      if (str.at(offset) == ',') {
+        ++offset;
+        continue;
+      } else if (str.at(offset) == ']') {
+        ++offset;
+        break;
+      } else {
+        throw std::runtime_error(
+            std::string("[Json Error] Array: Expected ',' or ']', found '") +
+            str.at(offset) + "'\n");
+      }
+    }
+    return Array;
+  }
 
   static Json parse_string(const std::string &str, size_t &offset) {
     std::string val;
@@ -445,7 +509,7 @@ struct JsonParser {
           throw std::runtime_error(
               std::string("[Json Error] Number: Expected a "
                           "number for exponent, found '") +
-              c + "'");
+              c + "'\n");
         } else {
           break;
         }
@@ -455,7 +519,8 @@ struct JsonParser {
     } else if (offset < str.size() &&
                (!isspace(c) && c != ',' && c != ']' && c != '}')) {
       throw std::runtime_error(
-          std::string("[Json Error] Number: Unexpected character '") + c + "'");
+          std::string("[Json Error] Number: Unexpected character '") + c +
+          "'\n");
     }
     --offset;
 
@@ -471,7 +536,8 @@ struct JsonParser {
                     picidae::json::detail::parse_num<std::int64_t>(val)) +
             std::pow(10, exp));
       } else {
-        return Json((is_negative ? -1 : 1) * picidae::json::detail::parse_num<std::int64_t>(val));
+        return Json((is_negative ? -1 : 1) *
+                    picidae::json::detail::parse_num<std::int64_t>(val));
       }
     }
   }
@@ -487,7 +553,7 @@ struct JsonParser {
       throw std::runtime_error(
           std::string(
               "[Json Error] Bool: Expected 'true' or 'false', found '") +
-          str.substr(offset, 5) + "'");
+          str.substr(offset, 5) + "'\n");
     }
   }
 
@@ -495,7 +561,7 @@ struct JsonParser {
     if (str.substr(offset, 4) != "null") {
       throw std::runtime_error(
           std::string("[Json Error] Null: Expected 'null', found '") +
-          str.substr(offset, 4) + "'");
+          str.substr(offset, 4) + "'\n");
     }
     offset += 4;
     return Json();
@@ -522,7 +588,7 @@ struct JsonParser {
         }
         throw std::runtime_error(
             std::string("[Json Error] Parse: Unexpected starting character '") +
-            value + "'");
+            value + "'\n");
     }
   }
 };
