@@ -15,6 +15,7 @@
 #include <variant>
 #include <vector>
 
+#include "picidae/json/detail/parse_number.hpp"
 #include "picidae/meta/macro.hpp"
 
 PICIDAE_NAMESPACE_BEGIN(PICIDAE_NAMESPACE)
@@ -166,7 +167,7 @@ class Json {
   explicit Json(Class type) : _internal(type) {}
 
   Json(std::initializer_list<Json> list) : _internal(Class::Object) {
-    for (auto i = list.begin(); i != list.end(); ++i, --i) {
+    for (auto i = list.begin(); i != list.end(); ++i, ++i) {
       operator[](i->to_string()) = *std::next(i);
     }
   }
@@ -382,11 +383,113 @@ struct JsonParser {
 
   static Json parse_array(const std::string &str, size_t &offset) {}
 
-  static Json parse_string(const std::string &str, size_t &offset) {}
+  static Json parse_string(const std::string &str, size_t &offset) {
+    std::string val;
+    for (char c = str.at(++offset); c != '\"'; c = str.at(++offset)) {
+      if (c == '\\') {
+        switch (str.at(++offset)) {
+          case '\"':
+            val += '\"';
+            break;
+          // TODO
+          default:
+            val += '\\';
+            break;
+        }
+      } else {
+        val += c;
+      }
+    }
+    ++offset;
+    return Json(val);
+  }
 
-  static Json parse_number(const std::string &str, size_t &offset) {}
+  static Json parse_number(const std::string &str, size_t &offset) {
+    std::string val, exp_str;
+    char c = '\0';
+    bool is_double = false;
+    bool is_negative = false;
+    bool is_exp_negative = false;
+    std::int64_t exp = 0;
+    if (offset < str.size() && str.at(offset) == '-') {
+      is_negative = true;
+      ++offset;
+    }
 
-  static Json parse_bool(const std::string &str, size_t &offset) {}
+    for (; offset < str.size();) {
+      c = str.at(offset++);
+      if (c >= '0' && c <= '9') {
+        val += c;
+      } else if (c == '.' && !is_double) {
+        val += c;
+        is_double = true;
+      } else {
+        break;
+      }
+    }
+
+    if (offset < str.size() && (c == 'E' || c == 'e')) {
+      c = str.at(offset++);
+      if (c == '-') {
+        is_exp_negative = true;
+      } else if (c == '+') {
+      } else {
+        ++offset;
+      }
+
+      for (; offset < str.size();) {
+        c = str.at(offset++);
+        if (c >= '0' && c <= '9') {
+          exp_str += c;
+        } else if (!isspace(c) && c != ',' && c != ']' && c != '}') {
+          throw std::runtime_error(
+              std::string("[Json Error] Number: Expected a "
+                          "number for exponent, found '") +
+              c + "'");
+        } else {
+          break;
+        }
+      }
+      exp = picidae::json::detail::parse_num<std::int64_t>(exp_str) *
+            (is_exp_negative ? -1 : 1);
+    } else if (offset < str.size() &&
+               (!isspace(c) && c != ',' && c != ']' && c != '}')) {
+      throw std::runtime_error(
+          std::string("[Json Error] Number: Unexpected character '") + c + "'");
+    }
+    --offset;
+
+    if (is_double) {
+      return Json((is_negative ? -1 : 1) *
+                  picidae::json::detail::parse_num<double>(val) *
+                  std::pow(10, exp));
+    } else {
+      if (!exp_str.empty()) {
+        return Json(
+            (is_negative ? -1 : 1) *
+                static_cast<double>(
+                    picidae::json::detail::parse_num<std::int64_t>(val)) +
+            std::pow(10, exp));
+      } else {
+        return Json((is_negative ? -1 : 1) * picidae::json::detail::parse_num<std::int64_t>(val));
+      }
+    }
+  }
+
+  static Json parse_bool(const std::string &str, size_t &offset) {
+    if (str.substr(offset, 4) == "true") {
+      offset += 4;
+      return Json(true);
+    } else if (str.substr(offset, 5) == "false") {
+      offset += 5;
+      return Json(false);
+    } else {
+      throw std::runtime_error(
+          std::string(
+              "[Json Error] Bool: Expected 'true' or 'false', found '") +
+          str.substr(offset, 5) + "'");
+    }
+  }
 
   static Json parse_null(const std::string &str, size_t &offset) {
     if (str.substr(offset, 4) != "null") {
