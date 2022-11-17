@@ -145,17 +145,17 @@ class Json {
 
   template <typename Container>
   class JsonConstWrapper {
-    Container *_object = nullptr;
+    const Container *_object = nullptr;
 
    public:
-    JsonConstWrapper(Container *val) : _object(val) {}
+    JsonConstWrapper(const Container *val) : _object(val) {}
 
     JsonConstWrapper(std::nullptr_t) {}
 
-    typename Container::const_iterator begin() const {
+    typename Container::const_iterator begin() const noexcept {
       return _object ? _object->begin() : typename Container::const_iterator();
     }
-    typename Container::const_iterator end() const {
+    typename Container::const_iterator end() const noexcept {
       return _object ? _object->end() : typename Container::const_iterator();
     }
   };
@@ -270,6 +270,102 @@ class Json {
   bool to_bool() const noexcept {
     return _internal.visitor<Class::Boolean>([](const auto &o) { return o; },
                                              []() { return false; });
+  }
+
+  JsonWrapper<std::map<std::string, Json>> object_range() {
+    return std::get_if<static_cast<std::size_t>(Class::Object)>(&_internal._d);
+  }
+
+  JsonWrapper<std::vector<Json>> array_range() {
+    return std::get_if<static_cast<std::size_t>(Class::Array)>(&_internal._d);
+  }
+
+  JsonConstWrapper<std::map<std::string, Json>> object_range() const {
+    return std::get_if<static_cast<std::size_t>(Class::Object)>(&_internal._d);
+  }
+
+  JsonConstWrapper<std::vector<Json>> array_range() const {
+    return std::get_if<static_cast<std::size_t>(Class::Array)>(&_internal._d);
+  }
+
+  std::string dump(long depth = 1, std::string tab = "  ") const {
+    switch (_internal.type()) {
+      case Class::Null:
+        return "null";
+      case Class::Object: {
+        std::string pad = "";
+        for (long i = 0; i < depth; ++i, pad += tab) {
+        }
+        std::string s = "{\n";
+        bool skip = true;
+        for (auto &p : *_internal.Map()) {
+          if (!skip) {
+            s += ",\n";
+          }
+          s += (pad + "\"" + json_escape(p.first) +
+                "\" : " + p.second.dump(depth + 1, tab));
+          skip = false;
+        }
+        s += ("\n" + pad.erase(0, 2) + "}");
+        return s;
+      }
+      case Class::Array: {
+        std::string s = "[";
+        bool skip = true;
+        for (auto &p : *_internal.Vector()) {
+          if (!skip) {
+            s += ", ";
+          }
+          s += p.dump(depth + 1, tab);
+          skip = false;
+        }
+        s += "]";
+        return s;
+      }
+      case Class::String:
+        return "\"" + json_escape(*_internal.String()) + "\"";
+      case Class::Floating:
+        return std::to_string(*_internal.Float());
+      case Class::Integral:
+        return std::to_string(*_internal.Int());
+      case Class::Boolean:
+        return *_internal.Bool() ? "true" : "false";
+    }
+    throw std::runtime_error("Unhandled Json Type");
+  }
+
+ private:
+  static std::string json_escape(const std::string &str) {
+    std::string output;
+    for (char i : str) {
+      switch (i) {
+        case '\"':
+          output += "\\\"";
+          break;
+        case '\\':
+          output += "\\\\";
+          break;
+        case '\b':
+          output += "\\b";
+          break;
+        case '\f':
+          output += "\\f";
+          break;
+        case '\n':
+          output += "\\n";
+          break;
+        case '\r':
+          output += "\\r";
+          break;
+        case '\t':
+          output += "\\t";
+          break;
+        default:
+          output += i;
+          break;
+      }
+    }
+    return output;
   }
 };
 
