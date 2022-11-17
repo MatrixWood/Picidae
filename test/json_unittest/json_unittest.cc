@@ -48,6 +48,12 @@ TEST(Json, number_exponent) {
   EXPECT_EQ(Json::Load("1.234E-10").dump(), "0.000000");
 }
 
+TEST(Json, object) {
+  using namespace picidae::json;
+
+  EXPECT_EQ(Json::Load("{\"a\":1,\"b\":2}").dump(), "{\n  \"a\" : 1,\n  \"b\" : 2\n}");
+}
+
 int main(int argc, char **argv) {
   testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
