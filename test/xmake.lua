@@ -15,3 +15,6 @@ target("lightweighttest_test")
 
 target("json_unittest")
   add_files("json_unittest/json_unittest.cc")
+
+target("date_unittest")
+  add_files("date_unittest/date_unittest.cc")

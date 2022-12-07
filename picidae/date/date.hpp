@@ -59,6 +59,7 @@ class day;
 
 day operator+(const day& x, const days& y) noexcept;
 day operator+(const days& x, const day& y) noexcept;
+days operator+(const day& x, const day& y) noexcept;
 day operator-(const day& x, const days& y) noexcept;
 days operator-(const day& x, const day& y) noexcept;
 
@@ -99,14 +100,9 @@ class day {
     return *this;
   }
 
+  inline constexpr operator unsigned() const noexcept { return _d; }
 
-  inline constexpr operator unsigned() const noexcept {
-    return _d;
-  }
-
-  constexpr bool ok() const noexcept {
-    return 1 <= _d && _d <= 31;
-  }
+  constexpr bool ok() const noexcept { return 1 <= _d && _d <= 31; }
 
  private:
   unsigned char _d;
@@ -116,17 +112,47 @@ inline day operator+(const day& x, const days& y) noexcept {
   return day{static_cast<unsigned>(x) + static_cast<unsigned>(y.count())};
 }
 
-inline day operator+(const days& x, const day& y) noexcept {
-  return y + x;
-}
+inline day operator+(const days& x, const day& y) noexcept { return y + x; }
 
-inline days operator-(const day& x, const day& y) noexcept {
+inline days operator+(const day& x, const day& y) noexcept {
   return days{static_cast<unsigned>(x) + static_cast<unsigned>(y)};
 }
 
-inline day operator-(const day& x, const days& y) noexcept {
-  return x + -y;
+inline days operator-(const day& x, const day& y) noexcept {
+  return days{static_cast<unsigned>(x) - static_cast<unsigned>(y)};
 }
+
+inline day operator-(const day& x, const days& y) noexcept { return x + -y; }
+
+inline constexpr day operator"" _d(unsigned long long d) noexcept {
+  return day{static_cast<unsigned>(d)};
+}
+
+inline constexpr bool operator==(const day& x, const day& y) noexcept {
+  return static_cast<unsigned>(x) == static_cast<unsigned>(y);
+}
+
+inline constexpr bool operator!=(const day& x, const day& y) noexcept {
+  return !(x == y);
+}
+
+inline constexpr bool operator<(const day& x, const day& y) noexcept {
+  return static_cast<unsigned>(x) < static_cast<unsigned>(y);
+}
+
+inline constexpr bool operator>(const day& x, const day& y) noexcept {
+  return y < x;
+}
+
+inline constexpr bool operator<=(const day& x, const day& y) noexcept {
+  return !(y < x);
+}
+
+inline constexpr bool operator>=(const day& x, const day& y) noexcept {
+  return !(x < y);
+}
+
+
 
 PICIDAE_NAMESPACE_END(date)
 
