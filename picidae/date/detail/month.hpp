@@ -147,6 +147,19 @@ inline std::basic_ostream<CharT, Traits>& operator<<(
   return os;
 }
 
+constexpr const date::month jan{1};
+constexpr const date::month feb{2};
+constexpr const date::month mar{3};
+constexpr const date::month apr{4};
+constexpr const date::month may{5};
+constexpr const date::month jun{6};
+constexpr const date::month jul{7};
+constexpr const date::month aug{8};
+constexpr const date::month sep{9};
+constexpr const date::month oct{10};
+constexpr const date::month nov{11};
+constexpr const date::month dec{12};
+
 PICIDAE_NAMESPACE_END(date)
 
 PICIDAE_NAMESPACE_END(PICIDAE_NAMESPACE)

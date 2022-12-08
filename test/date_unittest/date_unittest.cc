@@ -54,6 +54,19 @@ void test_month() {
   std::cout << plus_m_ms << std::endl;  // 10
   std::cout << month_13 << std::endl;   // 1
   std::cout << month_12 << std::endl;   // 12
+
+  static_assert(jan == month{1}, "");
+  static_assert(feb == month{2}, "");
+  static_assert(mar == month{3}, "");
+  static_assert(apr == month{4}, "");
+  static_assert(may == month{5}, "");
+  static_assert(jun == month{6}, "");
+  static_assert(jul == month{7}, "");
+  static_assert(aug == month{8}, "");
+  static_assert(sep == month{9}, "");
+  static_assert(oct == month{10}, "");
+  static_assert(nov == month{11}, "");
+  static_assert(dec == month{12}, "");
 }
 
 int main(int argc, char **argv) {
