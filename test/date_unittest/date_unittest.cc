@@ -1,5 +1,6 @@
 #include "picidae/date/date.hpp"
 
+#include <cassert>
 #include <sstream>
 #include <string>
 #include <type_traits>
@@ -67,6 +68,37 @@ void test_month() {
   static_assert(oct == month{10}, "");
   static_assert(nov == month{11}, "");
   static_assert(dec == month{12}, "");
+}
+
+void test_year() {
+  using namespace picidae::date;
+
+  auto y2015 = 2015_y;
+
+  static_assert(year{2015} == 2015_y, "");
+  static_assert(year{2015} != 2016_y, "");
+  static_assert(year{2015} < 2016_y, "");
+  static_assert(year{2016} > 2015_y, "");
+  static_assert(year{2015} <= 2015_y, "");
+  static_assert(year{2016} >= 2015_y, "");
+
+  static_assert(!year{2015}.is_leap(), "");
+  static_assert(year{2016}.is_leap(), "");
+
+  static_assert(year::min().ok(), "");
+  static_assert(year{2015}.ok(), "");
+  static_assert(year{2016}.ok(), "");
+  static_assert(year::max().ok(), "");
+
+  static_assert(2015_y - 2010_y == years{5}, "");
+  static_assert(2015_y - years{5} == 2010_y, "");
+  static_assert(2015_y == years{5} + 2010_y, "");
+  static_assert(2015_y == 2010_y + years{5}, "");
+
+  auto y = 2015_y;
+  std::ostringstream os;
+  os << y;
+  assert(os.str() == "2015");
 }
 
 int main(int argc, char **argv) {
