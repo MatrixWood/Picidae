@@ -25,6 +25,7 @@
 #include <type_traits>
 #include <utility>
 
+#include "picidae/date/stream.hpp"
 #include "picidae/meta/macro.hpp"
 
 PICIDAE_NAMESPACE_BEGIN(PICIDAE_NAMESPACE)
@@ -152,7 +153,28 @@ inline constexpr bool operator>=(const day& x, const day& y) noexcept {
   return !(x < y);
 }
 
+PICIDAE_NAMESPACE_BEGIN(detail)
 
+template <class CharT, class Traits>
+std::basic_ostream<CharT, Traits>& low_level_fmt(
+    std::basic_ostream<CharT, Traits>& os, const day& d) {
+  //stream::save_ostream<CharT, Traits> _(os);
+  os.fill('0');
+  os.flags(std::ios::dec | std::ios::right);
+  os.width(2);
+  os << static_cast<unsigned>(d);
+  return os;
+}
+
+PICIDAE_NAMESPACE_END(detail)
+
+template <class CharT, class Traits>
+inline std::basic_ostream<CharT, Traits>& operator<<(
+    std::basic_ostream<CharT, Traits>& os, const day& d) {
+  detail::low_level_fmt(os, d);
+  if (!d.ok()) os << " is not a valid day";
+  return os;
+}
 
 PICIDAE_NAMESPACE_END(date)
 
