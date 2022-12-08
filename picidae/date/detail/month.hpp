@@ -93,7 +93,7 @@ inline month operator-(const month& x, const months& y) noexcept {
   return x + -y;
 }
 
-inline month operator"" _m(unsigned long long m) noexcept {
+inline constexpr month operator"" _m(unsigned long long m) noexcept {
   auto const mu = static_cast<long long>(static_cast<unsigned>(m)) - 1;
   auto const yr = (mu >= 0 ? mu : mu - 11) / 12;
   return month{static_cast<unsigned>(mu - yr * 12 + 1)};
