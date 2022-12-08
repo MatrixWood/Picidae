@@ -68,6 +68,19 @@ void test_month() {
   static_assert(oct == month{10}, "");
   static_assert(nov == month{11}, "");
   static_assert(dec == month{12}, "");
+
+  static_assert(January == month{1}, "");
+  static_assert(February == month{2}, "");
+  static_assert(March == month{3}, "");
+  static_assert(April == month{4}, "");
+  static_assert(May == month{5}, "");
+  static_assert(June == month{6}, "");
+  static_assert(July == month{7}, "");
+  static_assert(August == month{8}, "");
+  static_assert(September == month{9}, "");
+  static_assert(October == month{10}, "");
+  static_assert(November == month{11}, "");
+  static_assert(December == month{12}, "");
 }
 
 void test_year() {
