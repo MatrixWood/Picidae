@@ -34,8 +34,31 @@ void test() {
   PICIDAE_TEST(oss.str() == "12");
 }
 
+void test_month() {
+  using namespace picidae::date;
+
+  auto months_15 = months{-15};
+
+  auto month_1 = 1_m;
+  auto month_13 = 13_m;
+  auto month_12 = 12_m;
+  auto plus_m_ms = month_1 + months_15;
+  auto minus_m_m = month_13 - month_1;
+  auto plus_m_m = month_13 + month_1;
+  std::cout << unsigned(plus_m_ms) << std::endl;  // 10
+  std::cout << minus_m_m.count() << std::endl;    // 12
+  std::cout << unsigned(month_13) << std::endl;   // 1
+  std::cout << unsigned(month_12) << std::endl;   // 12
+  std::cout << plus_m_m.count() << std::endl;     // 2
+
+  std::cout << plus_m_ms << std::endl;  // 10
+  std::cout << month_13 << std::endl;   // 1
+  std::cout << month_12 << std::endl;   // 12
+}
+
 int main(int argc, char **argv) {
   test();
+  test_month();
   picidae::lightweighttest::report_errors();
 
   return 0;
