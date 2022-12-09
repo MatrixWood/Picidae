@@ -26,7 +26,7 @@ class month {
       : _m(static_cast<decltype(_m)>(m)) {}
 
   inline month& operator++() noexcept {
-    ++_m;
+    *this += months{1};
     return *this;
   }
 
@@ -37,7 +37,7 @@ class month {
   }
 
   inline month& operator--() noexcept {
-    --_m;
+    *this -= months{1};
     return *this;
   }
 
