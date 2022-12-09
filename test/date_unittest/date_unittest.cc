@@ -114,9 +114,25 @@ void test_year() {
   assert(os.str() == "2015");
 }
 
+void test_weekday() {
+  using namespace picidae::date;
+
+  static_assert(!(sun != sun), "");
+  static_assert(sun != mon, "");
+  static_assert(mon != sun, "");
+
+  std::ostringstream os;
+  os << sun;
+  std::cout << os.str() << std::endl;
+
+  std::cout << (weekday{6} - weekday{1}).count() << std::endl;
+}
+
 int main(int argc, char **argv) {
   test();
   test_month();
+  test_year();
+  test_weekday();
   picidae::lightweighttest::report_errors();
 
   return 0;
