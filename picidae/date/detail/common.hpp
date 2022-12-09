@@ -33,6 +33,20 @@ using months =
     std::chrono::duration<int,
                           detail::ratio_divide<years::period, std::ratio<12>>>;
 
+template <class Duration>
+using sys_time = std::chrono::time_point<std::chrono::system_clock, Duration>;
+
+using sys_days = sys_time<days>;
+using sys_seconds = sys_time<std::chrono::seconds>;
+
+struct local_t {};
+
+template <class Duration>
+using local_time = std::chrono::time_point<local_t, Duration>;
+
+using local_seconds = local_time<std::chrono::seconds>;
+using local_days = local_time<days>;
+
 PICIDAE_NAMESPACE_END(date)
 
 PICIDAE_NAMESPACE_END(PICIDAE_NAMESPACE)
