@@ -25,13 +25,13 @@ void test() {
   auto day = 1_d;
   std::ostringstream oss;
   oss << day;
-  //std::cout << oss.str() << std::endl;
+  // std::cout << oss.str() << std::endl;
   PICIDAE_TEST(oss.str() == "01");
 
   d += days{11};
   oss.str("");
   oss << d;
-  //std::cout << oss.str() << std::endl;
+  // std::cout << oss.str() << std::endl;
   PICIDAE_TEST(oss.str() == "12");
 }
 
@@ -46,15 +46,15 @@ void test_month() {
   auto plus_m_ms = month_1 + months_15;
   auto minus_m_m = month_13 - month_1;
   auto plus_m_m = month_13 + month_1;
-  //std::cout << unsigned(plus_m_ms) << std::endl;  // 10
-  //std::cout << minus_m_m.count() << std::endl;    // 12
-  //std::cout << unsigned(month_13) << std::endl;   // 1
-  //std::cout << unsigned(month_12) << std::endl;   // 12
-  //std::cout << plus_m_m.count() << std::endl;     // 2
+  // std::cout << unsigned(plus_m_ms) << std::endl;  // 10
+  // std::cout << minus_m_m.count() << std::endl;    // 12
+  // std::cout << unsigned(month_13) << std::endl;   // 1
+  // std::cout << unsigned(month_12) << std::endl;   // 12
+  // std::cout << plus_m_m.count() << std::endl;     // 2
 
-  //std::cout << plus_m_ms << std::endl;  // 10
-  //std::cout << month_13 << std::endl;   // 1
-  //std::cout << month_12 << std::endl;   // 12
+  // std::cout << plus_m_ms << std::endl;  // 10
+  // std::cout << month_13 << std::endl;   // 1
+  // std::cout << month_12 << std::endl;   // 12
 
   static_assert(jan == month{1}, "");
   static_assert(feb == month{2}, "");
@@ -123,9 +123,9 @@ void test_weekday() {
 
   std::ostringstream os;
   os << sun;
-  //std::cout << os.str() << std::endl;
+  // std::cout << os.str() << std::endl;
 
-  //std::cout << (weekday{6} - weekday{1}).count() << std::endl;
+  // std::cout << (weekday{6} - weekday{1}).count() << std::endl;
 }
 
 void test_weekday_indexed() {
@@ -206,6 +206,12 @@ void test_month_day() {
   std::ostringstream os;
   os << md1;
   assert(os.str() == "2/28");
+
+  static_assert(aug / 14_d == month_day{month{8}, day{14}}, "");
+  static_assert(aug / 14 == month_day{month{8}, day{14}}, "");
+  static_assert(8 / 14_d == month_day{month{8}, day{14}}, "");
+  static_assert(14_d / aug == month_day{month{8}, day{14}}, "");
+  static_assert(14_d / 8 == month_day{month{8}, day{14}}, "");
 }
 
 int main(int argc, char **argv) {
