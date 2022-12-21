@@ -185,6 +185,8 @@ void test_year_month() {
 
   static_assert(2015_y / aug == year_month{year{2015}, aug}, "");
   static_assert(2015_y / 8 == year_month{year{2015}, aug}, "");
+
+  auto month_minus = 2015_y / 8_m - 2014_y / 3_m;
 }
 
 void test_month_day() {
@@ -214,6 +216,39 @@ void test_month_day() {
   static_assert(14_d / 8 == month_day{month{8}, day{14}}, "");
 }
 
+void test_month_weekday() {
+  using namespace picidae::date;
+
+  constexpr month_weekday mwd1 = {feb, sat[4]};
+  constexpr month_weekday mwd2 = {mar, mon[1]};
+  static_assert(mwd1.ok(), "");
+  static_assert(mwd2.ok(), "");
+  static_assert(!month_weekday{feb, sat[0]}.ok(), "");
+  static_assert(!month_weekday{month{0}, sun[1]}.ok(), "");
+  static_assert(mwd1.month() == feb, "");
+  static_assert(mwd1.weekday_indexed() == sat[4], "");
+  static_assert(mwd2.month() == mar, "");
+  static_assert(mwd2.weekday_indexed() == mon[1], "");
+  static_assert(mwd1 == mwd1, "");
+  static_assert(mwd1 != mwd2, "");
+  std::ostringstream os;
+  os << mwd1;
+  assert(os.str() == "2/6[4]");
+
+  static_assert(
+      aug / fri[2] == month_weekday{month{8}, weekday_indexed{weekday{5u}, 2}},
+      "");
+  static_assert(
+      8 / fri[2] == month_weekday{month{8}, weekday_indexed{weekday{5u}, 2}},
+      "");
+  static_assert(
+      fri[2] / aug == month_weekday{month{8}, weekday_indexed{weekday{5u}, 2}},
+      "");
+  static_assert(
+      fri[2] / 8 == month_weekday{month{8}, weekday_indexed{weekday{5u}, 2}},
+      "");
+}
+
 int main(int argc, char **argv) {
   test();
   test_month();
@@ -223,6 +258,7 @@ int main(int argc, char **argv) {
   test_weekday_last();
   test_year_month();
   test_month_day();
+  test_month_weekday();
 
   return picidae::lightweighttest::report_errors();
 }
