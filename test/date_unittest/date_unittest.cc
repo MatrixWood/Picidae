@@ -128,12 +128,41 @@ void test_weekday() {
   std::cout << (weekday{6} - weekday{1}).count() << std::endl;
 }
 
+void test_weekday_indexed() {
+  using namespace picidae::date;
+
+  constexpr weekday_indexed wdi = sun[1];
+  static_assert(wdi.weekday() == sun, "");
+  static_assert(wdi.index() == 1, "");
+  static_assert(wdi.ok(), "");
+  static_assert(wdi == weekday_indexed{sun, 1}, "");
+  static_assert(wdi != weekday_indexed{sun, 2}, "");
+  static_assert(wdi != weekday_indexed{mon, 1}, "");
+  std::ostringstream os;
+  os << wdi;
+  assert(os.str() == "0[1]");
+}
+
+void test_weekday_last() {
+  using namespace picidae::date;
+
+  constexpr weekday_last wdl = sun[last];
+  static_assert(wdl.weekday() == sun, "");
+  static_assert(wdl.ok(), "");
+  static_assert(wdl == weekday_last{sun}, "");
+  static_assert(wdl != weekday_last{mon}, "");
+  std::ostringstream os;
+  os << wdl;
+  assert(os.str() == "0[last]");
+}
+
 int main(int argc, char **argv) {
   test();
   test_month();
   test_year();
   test_weekday();
-  picidae::lightweighttest::report_errors();
+  test_weekday_indexed();
+  test_weekday_last();
 
-  return 0;
+  return picidae::lightweighttest::report_errors();
 }
