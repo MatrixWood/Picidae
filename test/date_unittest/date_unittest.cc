@@ -25,13 +25,13 @@ void test() {
   auto day = 1_d;
   std::ostringstream oss;
   oss << day;
-  std::cout << oss.str() << std::endl;
+  //std::cout << oss.str() << std::endl;
   PICIDAE_TEST(oss.str() == "01");
 
   d += days{11};
   oss.str("");
   oss << d;
-  std::cout << oss.str() << std::endl;
+  //std::cout << oss.str() << std::endl;
   PICIDAE_TEST(oss.str() == "12");
 }
 
@@ -46,15 +46,15 @@ void test_month() {
   auto plus_m_ms = month_1 + months_15;
   auto minus_m_m = month_13 - month_1;
   auto plus_m_m = month_13 + month_1;
-  std::cout << unsigned(plus_m_ms) << std::endl;  // 10
-  std::cout << minus_m_m.count() << std::endl;    // 12
-  std::cout << unsigned(month_13) << std::endl;   // 1
-  std::cout << unsigned(month_12) << std::endl;   // 12
-  std::cout << plus_m_m.count() << std::endl;     // 2
+  //std::cout << unsigned(plus_m_ms) << std::endl;  // 10
+  //std::cout << minus_m_m.count() << std::endl;    // 12
+  //std::cout << unsigned(month_13) << std::endl;   // 1
+  //std::cout << unsigned(month_12) << std::endl;   // 12
+  //std::cout << plus_m_m.count() << std::endl;     // 2
 
-  std::cout << plus_m_ms << std::endl;  // 10
-  std::cout << month_13 << std::endl;   // 1
-  std::cout << month_12 << std::endl;   // 12
+  //std::cout << plus_m_ms << std::endl;  // 10
+  //std::cout << month_13 << std::endl;   // 1
+  //std::cout << month_12 << std::endl;   // 12
 
   static_assert(jan == month{1}, "");
   static_assert(feb == month{2}, "");
@@ -123,9 +123,9 @@ void test_weekday() {
 
   std::ostringstream os;
   os << sun;
-  std::cout << os.str() << std::endl;
+  //std::cout << os.str() << std::endl;
 
-  std::cout << (weekday{6} - weekday{1}).count() << std::endl;
+  //std::cout << (weekday{6} - weekday{1}).count() << std::endl;
 }
 
 void test_weekday_indexed() {
@@ -183,8 +183,29 @@ void test_year_month() {
   os << ym1;
   assert(os.str() == "2015/6");
 
-  static_assert(2015_y/aug == year_month{year{2015}, aug}, "");
-  static_assert(2015_y/8   == year_month{year{2015}, aug}, "");
+  static_assert(2015_y / aug == year_month{year{2015}, aug}, "");
+  static_assert(2015_y / 8 == year_month{year{2015}, aug}, "");
+}
+
+void test_month_day() {
+  using namespace picidae::date;
+
+  constexpr month_day md1 = {feb, day{28}};
+  constexpr month_day md2 = {mar, day{1}};
+  static_assert(md1.ok(), "");
+  static_assert(md2.ok(), "");
+  static_assert(!month_day{feb, day{32}}.ok(), "");
+  static_assert(!month_day{month{0}, day{1}}.ok(), "");
+  static_assert(md1.month() == feb, "");
+  static_assert(md1.day() == day{28}, "");
+  static_assert(md2.month() == mar, "");
+  static_assert(md2.day() == day{1}, "");
+  static_assert(md1 == md1, "");
+  static_assert(md1 != md2, "");
+  static_assert(md1 < md2, "");
+  std::ostringstream os;
+  os << md1;
+  assert(os.str() == "2/28");
 }
 
 int main(int argc, char **argv) {
@@ -195,6 +216,7 @@ int main(int argc, char **argv) {
   test_weekday_indexed();
   test_weekday_last();
   test_year_month();
+  test_month_day();
 
   return picidae::lightweighttest::report_errors();
 }
