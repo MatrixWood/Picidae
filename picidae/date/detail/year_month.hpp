@@ -12,10 +12,6 @@ PICIDAE_NAMESPACE_BEGIN(PICIDAE_NAMESPACE)
 
 PICIDAE_NAMESPACE_BEGIN(date)
 
-PICIDAE_NAMESPACE_BEGIN(detail)
-struct unspecified_month_disambiguator {};
-PICIDAE_NAMESPACE_END(detail)
-
 class year_month;
 
 template <class = detail::unspecified_month_disambiguator>

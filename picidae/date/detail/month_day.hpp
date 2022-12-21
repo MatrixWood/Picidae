@@ -41,9 +41,7 @@ constexpr month_day operator/(const day& d, const month& m) noexcept {
   return m / d;
 }
 
-constexpr month_day operator/(const day& d, int m) noexcept {
-  return m / d;
-}
+constexpr month_day operator/(const day& d, int m) noexcept { return m / d; }
 
 constexpr month_day operator/(const month& m, const day& d) noexcept {
   return {m, d};
@@ -99,6 +97,80 @@ inline std::basic_ostream<CharT, Traits>& operator<<(
     std::basic_ostream<CharT, Traits>& os, const month_day& md) {
   detail::low_level_fmt(os, md);
   if (!md.ok()) os << " is not a valid month_day";
+  return os;
+}
+
+class month_day_last {
+ public:
+  constexpr explicit month_day_last(const date::month& m) noexcept : _m(m) {}
+
+  constexpr date::month month() const noexcept { return _m; }
+
+  constexpr bool ok() const noexcept { return _m.ok(); }
+
+ private:
+  date::month _m;
+};
+
+constexpr month_day_last operator/(const month& m, last_spec) noexcept {
+  return month_day_last{m};
+}
+
+constexpr month_day_last operator/(int m, last_spec) noexcept {
+  return month(static_cast<unsigned>(m)) / last;
+}
+
+constexpr month_day_last operator/(last_spec, const month& m) noexcept {
+  return m / last;
+}
+constexpr month_day_last operator/(last_spec, int m) noexcept {
+  return m / last;
+}
+
+constexpr bool operator==(const month_day_last& x,
+                          const month_day_last& y) noexcept {
+  return x.month() == y.month();
+}
+
+constexpr bool operator!=(const month_day_last& x,
+                          const month_day_last& y) noexcept {
+  return !(x == y);
+}
+
+constexpr bool operator<(const month_day_last& x,
+                         const month_day_last& y) noexcept {
+  return x.month() < y.month();
+}
+
+constexpr bool operator>(const month_day_last& x,
+                         const month_day_last& y) noexcept {
+  return y < x;
+}
+
+constexpr bool operator<=(const month_day_last& x,
+                          const month_day_last& y) noexcept {
+  return !(y < x);
+}
+constexpr bool operator>=(const month_day_last& x,
+                          const month_day_last& y) noexcept {
+  return !(x < y);
+}
+
+PICIDAE_NAMESPACE_BEGIN(detail)
+
+template <class CharT, class Traits>
+std::basic_ostream<CharT, Traits>& low_level_fmt(
+    std::basic_ostream<CharT, Traits>& os, const month_day_last& mdl) {
+  return low_level_fmt(os, mdl.month()) << "/last";
+}
+
+PICIDAE_NAMESPACE_END(detail)
+
+template <class CharT, class Traits>
+inline std::basic_ostream<CharT, Traits>& operator<<(
+    std::basic_ostream<CharT, Traits>& os, const month_day_last& mdl) {
+  detail::low_level_fmt(os, mdl);
+  if (!mdl.ok()) os << " is not a valid month_day_last";
   return os;
 }
 

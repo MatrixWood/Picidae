@@ -11,6 +11,12 @@ struct last_spec {
   explicit last_spec() = default;
 };
 
+constexpr const last_spec last{};
+
+PICIDAE_NAMESPACE_BEGIN(detail)
+struct unspecified_month_disambiguator {};
+PICIDAE_NAMESPACE_END(detail)
+
 class day;
 class month;
 class year;

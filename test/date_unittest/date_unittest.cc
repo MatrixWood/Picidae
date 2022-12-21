@@ -249,6 +249,134 @@ void test_month_weekday() {
       "");
 }
 
+void test_month_day_last() {
+  using namespace picidae::date;
+
+  constexpr month_day_last mdl1{feb};
+  constexpr month_day_last mdl2{mar};
+  static_assert(mdl1.ok(), "");
+  static_assert(mdl2.ok(), "");
+  static_assert(!month_day_last{month{0}}.ok(), "");
+  static_assert(mdl1.month() == feb, "");
+  static_assert(mdl2.month() == mar, "");
+  static_assert(mdl1 == mdl1, "");
+  static_assert(mdl1 != mdl2, "");
+  static_assert(mdl1 < mdl2, "");
+  std::ostringstream os;
+  os << mdl1;
+  assert(os.str() == "2/last");
+
+  static_assert(aug / last == month_day_last{month{8}}, "");
+  static_assert(8 / last == month_day_last{month{8}}, "");
+  static_assert(last / aug == month_day_last{month{8}}, "");
+  static_assert(last / 8 == month_day_last{month{8}}, "");
+}
+
+void test_year_month_day() {
+  using namespace picidae::date;
+
+  constexpr year_month_day ymd1 = {2015_y, aug, 9_d};
+  static_assert(ymd1.ok(), "");
+  static_assert(ymd1.year() == 2015_y, "");
+  static_assert(ymd1.month() == aug, "");
+  static_assert(ymd1.day() == 9_d, "");
+  std::ostringstream os;
+  os << ymd1;
+  assert(os.str() == "2015-08-09");
+
+  static_assert((2000_y / feb / 29).ok(), "");
+  static_assert(!(2000_y / feb / 30).ok(), "");
+  static_assert((2100_y / feb / 28).ok(), "");
+  static_assert(!(2100_y / feb / 29).ok(), "");
+
+  PICIDAE_TEST(sys_days(2100_y / feb / 28) + days{1} ==
+               sys_days(2100_y / mar / 1));
+  PICIDAE_TEST(sys_days(2000_y / mar / 1) - sys_days(2000_y / feb / 28) ==
+               days{2});
+  PICIDAE_TEST(sys_days(2100_y / mar / 1) - sys_days(2100_y / feb / 28) ==
+               days{1});
+
+  PICIDAE_TEST_EQ(jan / 31 / 2015, jan / last / 2015);
+  PICIDAE_TEST_EQ(feb / 28 / 2015, feb / last / 2015);
+  PICIDAE_TEST_EQ(mar / 31 / 2015, mar / last / 2015);
+  PICIDAE_TEST_EQ(apr / 30 / 2015, apr / last / 2015);
+  PICIDAE_TEST_EQ(may / 31 / 2015, may / last / 2015);
+  PICIDAE_TEST_EQ(jun / 30 / 2015, jun / last / 2015);
+  PICIDAE_TEST_EQ(jul / 31 / 2015, jul / last / 2015);
+  PICIDAE_TEST_EQ(aug / 31 / 2015, aug / last / 2015);
+  PICIDAE_TEST_EQ(sep / 30 / 2015, sep / last / 2015);
+  PICIDAE_TEST_EQ(oct / 31 / 2015, oct / last / 2015);
+  PICIDAE_TEST_EQ(nov / 30 / 2015, nov / last / 2015);
+  PICIDAE_TEST_EQ(dec / 31 / 2015, dec / last / 2015);
+
+  PICIDAE_TEST_EQ(jan / 31 / 2016, jan / last / 2016);
+  PICIDAE_TEST_EQ(feb / 29 / 2016, feb / last / 2016);
+  PICIDAE_TEST_EQ(mar / 31 / 2016, mar / last / 2016);
+  PICIDAE_TEST_EQ(apr / 30 / 2016, apr / last / 2016);
+  PICIDAE_TEST_EQ(may / 31 / 2016, may / last / 2016);
+  PICIDAE_TEST_EQ(jun / 30 / 2016, jun / last / 2016);
+  PICIDAE_TEST_EQ(jul / 31 / 2016, jul / last / 2016);
+  PICIDAE_TEST_EQ(aug / 31 / 2016, aug / last / 2016);
+  PICIDAE_TEST_EQ(sep / 30 / 2016, sep / last / 2016);
+  PICIDAE_TEST_EQ(oct / 31 / 2016, oct / last / 2016);
+  PICIDAE_TEST_EQ(nov / 30 / 2016, nov / last / 2016);
+  PICIDAE_TEST_EQ(dec / 31 / 2016, dec / last / 2016);
+
+  static_assert(
+      2015_y / aug / 14_d == year_month_day{year{2015}, month{8}, day{14}}, "");
+  static_assert(
+      2015_y / aug / 14 == year_month_day{year{2015}, month{8}, day{14}}, "");
+  static_assert(
+      2015_y / (aug / 14_d) == year_month_day{year{2015}, month{8}, day{14}},
+      "");
+  static_assert(
+      2015 / (aug / 14_d) == year_month_day{year{2015}, month{8}, day{14}}, "");
+  static_assert(
+      aug / 14_d / 2015_y == year_month_day{year{2015}, month{8}, day{14}}, "");
+  static_assert(
+      aug / 14_d / 2015 == year_month_day{year{2015}, month{8}, day{14}}, "");
+}
+
+void test_year_month_day_last() {
+  using namespace picidae::date;
+
+  constexpr year_month_day_last ymdl1 = {2015_y, month_day_last{aug}};
+  static_assert(ymdl1.ok(), "");
+  static_assert(ymdl1.year() == 2015_y, "");
+  static_assert(ymdl1.month() == aug, "");
+  static_assert(ymdl1.month_day_last() == month_day_last{aug}, "");
+  static_assert(ymdl1.day() == 31_d, "");
+
+  constexpr year_month_day_last ymdl2 = {2015_y, month_day_last{sep}};
+
+  static_assert(ymdl1 == ymdl1, "");
+  static_assert(ymdl1 != ymdl2, "");
+  static_assert(ymdl1 < ymdl2, "");
+  static_assert(ymdl2 > ymdl1, "");
+  static_assert(ymdl1 <= ymdl1, "");
+  static_assert(ymdl2 >= ymdl1, "");
+
+  std::ostringstream os;
+  os << ymdl1;
+  assert(os.str() == "2015/8/last");
+
+  static_assert(2015_y / aug / last ==
+                    year_month_day_last{year{2015}, month_day_last{month{8}}},
+                "");
+  static_assert(2015_y / (aug / last) ==
+                    year_month_day_last{year{2015}, month_day_last{month{8}}},
+                "");
+  static_assert(2015 / (aug / last) ==
+                    year_month_day_last{year{2015}, month_day_last{month{8}}},
+                "");
+  static_assert(aug / last / 2015_y ==
+                    year_month_day_last{year{2015}, month_day_last{month{8}}},
+                "");
+  static_assert(aug / last / 2015 ==
+                    year_month_day_last{year{2015}, month_day_last{month{8}}},
+                "");
+}
+
 int main(int argc, char **argv) {
   test();
   test_month();
@@ -258,7 +386,10 @@ int main(int argc, char **argv) {
   test_weekday_last();
   test_year_month();
   test_month_day();
+  test_month_day_last();
   test_month_weekday();
+  test_year_month_day();
+  test_year_month_day_last();
 
   return picidae::lightweighttest::report_errors();
 }
