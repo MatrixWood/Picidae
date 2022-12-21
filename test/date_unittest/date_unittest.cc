@@ -156,6 +156,37 @@ void test_weekday_last() {
   assert(os.str() == "0[last]");
 }
 
+void test_year_month() {
+  using namespace picidae::date;
+
+  constexpr year_month ym1 = {2015_y, jun};
+  static_assert(ym1.year() == year{2015}, "");
+  static_assert(ym1.month() == jun, "");
+  static_assert(ym1.ok(), "");
+
+  constexpr year_month ym2 = {2016_y, may};
+  static_assert(ym2.year() == year{2016}, "");
+  static_assert(ym2.month() == may, "");
+  static_assert(ym2.ok(), "");
+
+  static_assert(ym1 == ym1, "");
+  static_assert(ym1 != ym2, "");
+  static_assert(ym1 < ym2, "");
+  static_assert(ym1 <= ym2, "");
+  static_assert(ym2 > ym1, "");
+  static_assert(ym2 >= ym2, "");
+
+  static_assert(ym2 - ym1 == months{11}, "");
+  static_assert(ym1 - ym2 == -months{11}, "");
+
+  std::ostringstream os;
+  os << ym1;
+  assert(os.str() == "2015/6");
+
+  static_assert(2015_y/aug == year_month{year{2015}, aug}, "");
+  static_assert(2015_y/8   == year_month{year{2015}, aug}, "");
+}
+
 int main(int argc, char **argv) {
   test();
   test_month();
@@ -163,6 +194,7 @@ int main(int argc, char **argv) {
   test_weekday();
   test_weekday_indexed();
   test_weekday_last();
+  test_year_month();
 
   return picidae::lightweighttest::report_errors();
 }
