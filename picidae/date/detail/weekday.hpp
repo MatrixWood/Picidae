@@ -133,8 +133,6 @@ inline std::basic_ostream<CharT, Traits>& operator<<(
   return os;
 }
 
-constexpr const last_spec last{};
-
 constexpr const weekday sun{0u};
 constexpr const weekday mon{1u};
 constexpr const weekday tue{2u};
