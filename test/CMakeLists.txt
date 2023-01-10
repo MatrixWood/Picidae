@@ -15,6 +15,7 @@ set(TEST_LIST
   common_macro_test
   meta_test
   lightweighttest_test
+  core_test
 )
 
 foreach(src ${TEST_LIST})
