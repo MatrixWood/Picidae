@@ -15,6 +15,7 @@ set(TEST_LIST
   common_macro_test
   meta_test
   lightweighttest_test
+  core_test
 )
 
 foreach(src ${TEST_LIST})
@@ -63,5 +64,22 @@ foreach(src ${JSON_TEST_LIST})
 endforeach()
 
 foreach(src ${JSON_TEST_LIST})
+  add_test(${src}-memory-check ${memcheck_command} ./${src})
+endforeach()
+
+set(DATE_TEST_LIST
+  date_unittest
+)
+
+foreach(src ${DATE_TEST_LIST})
+  message(STATUS "unittest files found: ${src}.cc")
+  add_executable(${src} EXCLUDE_FROM_ALL date_unittest/${src}.cc)
+  target_include_directories(${src} PUBLIC ${PROJECT_SOURCE_DIR}/..)
+  target_link_libraries(${src} GTest::gtest GTest::gtest_main)
+  add_test(${src} ${src})
+  add_dependencies(check ${src})
+endforeach()
+
+foreach(src ${DATE_TEST_LIST})
   add_test(${src}-memory-check ${memcheck_command} ./${src})
 endforeach()
